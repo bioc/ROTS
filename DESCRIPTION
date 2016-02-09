@@ -1,0 +1,16 @@
+Package: ROTS
+Type: Package
+Title: Reproducibility-Optimized Test Statistic
+Version: 0.99.4
+Author: Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
+Maintainer: Fatemeh Seyednasrollah <fatsey@utu.fi>
+Description: Calculates the Reproducibility-Optimized Test Statistic
+        (ROTS) for differential testing in omics data.
+biocViews: Software, GeneExpression, DifferentialExpression,
+        Microarray, RNASeq, Proteomics
+License: GPL (>= 2)
+LazyData: yes
+LinkingTo: Rcpp
+Imports: Rcpp, stats, Biobase, methods
+Depends: R (>= 3.3)
+NeedsCompilation: yes
