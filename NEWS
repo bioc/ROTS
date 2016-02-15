@@ -1,0 +1,7 @@
+CHANGES IN ROTS 0.99.5
+- Added support for paired tests
+- Updated vignette
+- Bug fixes
+
+CHANGES IN ROTS 0.99.4
+- Modified for Bioconductor release

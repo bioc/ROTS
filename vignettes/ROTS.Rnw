@@ -25,11 +25,11 @@ ROTS: Reproducibility Optimized Test Statistic
 
 \date{February 1, 2016}
 
+\setlength\parindent{0pt}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
 \maketitle
-
 
 
 \textnormal{\normalfont}
@@ -39,76 +39,50 @@ ROTS: Reproducibility Optimized Test Statistic
 
 \section{Introduction}
 
-Differential testing is the most common approach among current omics analysis. ROTS-statistic aims to rank genomic features of interest (including genes, proteins and transcripts) in order of evidence for differential expression in two-group comparisons. Initially, ROTS was developed to test differential expression in microarray studies. However, the general design of the algorithm supports the utility of the method in proteomics and count-based technologies like RNA-seq and single cell datasets. ROTS is a data adaptive method which can optimize its parameters based on intrinsic features of input data. Also, the method aims to solve the common problem of small sample size through a random resampling procedure. \\[1em]
+Differential expression testing is perhaps the most common approach among current omics analysies. Reproducibility optimized test statistic (ROTS) aims to rank genomic features of interest (such as genes, proteins and transcripts) in order of evidence for differential expression in two-group comparisons. Initially, ROTS was developed to test differential expression in microarray studies (Elo 2008). However, the general design of the algorithm supports the utility of the method in proteomics and count-based technologies like RNA-seq and single cell datasets (Seyednasrollah et al. 2015, Pursiheimo et al. 2015). ROTS is a data adaptive method which can optimize its parameters based on intrinsic features of input data. Also, the method aims to solve the common problem of small sample size through a resampling procedure. \\[1em]
 
-The statistic is optimized among a family of \textit{t-type} statistics
-$d = m/(\alpha1 + \alpha2 \times s)$, where $m$ is the absolute difference between the group averages $\left|\bar{x_1} - \bar{x_2}\right|$, $s$ is
-the pooled standard error, and $\alpha1$ and $\alpha2$ are the non-negative parameters to be optimized. Two
-special cases of this family are the ordinary \textit{t-statistic} $(\alpha1 = 0, \alpha2 = 1)$ and the signal log-ratio
-$(\alpha1 = 1, \alpha2 = 0)$.\\[1em]
+The ROTS statistic is optimized among a family of \textit{t-type} statistics
+$d = m/(\alpha_1 + \alpha_2 \times s)$, where $m$ is the absolute difference between the group averages $\left|\bar{x_1} - \bar{x_2}\right|$, $s$ is the pooled standard error, and $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized. Two special cases of this family are the ordinary \textit{t-statistic} $(\alpha_1 = 0, \alpha_2 = 1)$ and the signal log-ratio $(\alpha_1 = 1, \alpha_2 = 0)$.\\[1em]
 
+The optimality is defined in terms of maximal overlap of top-ranked features in group-preserving bootstrap datasets. Importantly, besides the group labels, no a priori information about the properties of the data is required and no fixed cutoff for the gene rankings needs to be specified. The user is given the option to adjust the largest top list size ($K$) considered in the reproducibility calculations, since lowering this size can markedly reduce the computation time. In large data matrices with thousands of rows, we generally recommend using a size of several thousands.\\[1em]
 
-
-The optimality is defined in terms of maximal overlap of top-ranked features in group-preserving bootstrap
-datasets. Importantly, besides the group labels, no a priori information about the properties of
-the data is required and no fixed cutoff for the gene rankings needs to be specified.
-The user is given the option to adjust the largest top list size ($K$) considered in the reproducibility
-calculations, since lowering this size can markedly reduce the computation time. In large data matrices
-with thousands of rows, we generally recommend using a size of several thousands. In smaller
-data matrices, and especially if there are many rows with only a few non-missing entries, the size of
-$K$ should be decreased accordingly.\\[1em]
-ROTS tolerates a moderate number of missing values in the data matrix by effectively ignoring
-their contribution during the operation of the procedure. However, each row of the data matrix
-must contain at least two values in both groups. The rows containing only a few non-missing values
-should be removed; or alternatively, the missing data entries can be imputed using, e.g., the
-K-nearest neighbour imputation, which is implemented in the Bioconductor package impute.
-If the parameter values $\alpha1$ and $\alpha2$ are set by the user, then no optimization is performed but the
-statistic and FDR-values are calculated for the given parameters. The false discovery rate (FDR)
-for the optimized test statistic is calculated by permuting the sample labels. The results for all the
-genes can be obtained by setting the FDR cutoff to 1.
+ROTS tolerates a moderate number of missing values in the data matrix by effectively ignoring their contribution during the operation of the procedure. However, each row of the data matrix must contain at least two values in both groups. The rows containing only a few non-missing values should be removed; or alternatively, the missing data entries can be imputed using, e.g., the K-nearest neighbour imputation, which is implemented in the Bioconductor package impute. If the parameter values $\alpha_1$ and $\alpha_2$ are set by the user, then no optimization is performed but the statistic and FDR-values are calculated for the given parameters. The false discovery rate (FDR) for the optimized test statistic is calculated by permuting the sample labels. The results for all the genes can be obtained by setting the FDR cutoff to 1.
 
 \section{Algorithm overview}
 
-ROTS optimizes the reproducibility among a family of modified t-statistics:
+ROTS optimizes the reproducibility among a family of modified \textit{t}-statistics:
 \begin{equation}
-  d = \frac{\left|\bar{x_1} - \bar{x_2}\right|}{ \alpha1 + \alpha2 \times s}
+  d_\alpha = \frac{\left|\bar{x_1} - \bar{x_2}\right|}{ \alpha_1 + \alpha_2 \times s}
 \end{equation}
 
-
-where $\left|\bar{x_1} - \bar{x_2}\right|$ is the absolute difference between the group averages.
-$s$ is the pooled standard error.
-$\alpha1$ and $\alpha2$ are the non-negative parameters to be optimized.
+where $\left|\bar{x_1} - \bar{x_2}\right|$ is the absolute difference between the group averages, $s$ is the pooled standard error, $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized.
 The optimal statistic is determined by maximizing the reproducibility Z-score:
 
 \begin{equation}
 	Z_k\left(d_\alpha\right) = \frac{R_k\left(d_\alpha\right) - R_k^0\left(d_\alpha\right)}{s_k\left(d_\alpha\right)}
 \end{equation}
 
-over a dence lattice $\alpha1 \in [0, 0.01, . . . , 5]$ , $\alpha2 \in \left\{0, 1\right\}$, $k \in \left\{1, 2, . . . , G\right\}$.\\[1em]
-\\$R_k\left(d_\alpha\right)$ is the observed reproducibility.
-\\$R_k^0\left(d_\alpha\right)$ is the reproducibility in randomize datasets (permuted over samples).
-\\$s_k\left(d_\alpha\right)$ is the standard deviation od the bootstrap distribution.
-\\$G$ is the total number of genes/proteins etc. \\[1em]
-\\Reproducibility is defined as the average overlap of k top-ranked genes, proteins etc. over pair
-of bootstrapped datasets. \\[1em]
+over a dence lattice $\alpha_1 \in [0, 0.01, . . . , 5]$ , $\alpha_2 \in \left\{0, 1\right\}$, $k \in \left\{1, 2, . . . , G\right\}$.\\[1em]
+
+Here, $R_k\left(d_\alpha\right)$ is the observed reproducibility at top list size $k$, $R_k^0\left(d_\alpha\right)$ is the corresponding reproducibility in randomized datasets (permuted over samples), $s_k\left(d_\alpha\right)$ is the standard deviation of the bootstrap distribution, and $G$ is the total number of genes/proteins in the data. \\[1em]
+
+Reproducibility is defined as the average overlap of $k$ top-ranked genemoc features over pairs of bootstrapped datasets. \\[1em]
 
 For more detailed information about the ROTS algorithm, see Elo et al. (2008) and Seyednasrollah et al. (2015).
 
-
 \section{Input data}
 
-ROTS expects the input data in form of a matrix with genomic features as rows and samples as columns. It is recommended to use normalized data as the input for ROTS. The matrix can be either of integer numbers, e.g. for RNA-seq and single cells, or float numbers, e.g. microarray intensities. 
+ROTS expects the input data to be in form of a matrix with genomic features as rows and samples as columns. It is recommended to use normalized data as the input for ROTS. The matrix can be either of integer numbers, e.g. for RNA-seq and single cells, or float numbers, e.g. microarray intensities. 
 
 \section{Preprocessing}
 
-For count-based data, we recommend the widely used preprocessing techniques like TMM (Trimmed Mean of M-values) normalization available in edgeR Bioconductor package or TMM normalization plus Voom transformation available in Limma Bioconductor package. For proteomics data, one standard normalization technique plus log transformation is recommended. 
+For count-based data, we recommend the widely used preprocessing techniques like TMM (Trimmed Mean of M-values) normalization available in edgeR Bioconductor package or TMM normalization plus Voom transformation available in Limma Bioconductor package. For microarray and proteomics data, standard normalization techniques are recommended.
 
+\section{Differential expression testing}
 
-\section{Differential testing}
+We use here a microarray dataset as an example for differential expression testing. The overall approach is the same for other omics data along with recommended preprocessing strategies. \\[1em]
 
-As mentioned in the introduction part, a reproducible approach is used to optimize a t-type statistic and ranking the genomic features (e.g. genes, transcripts or proteins) for differential expression. Here, we are using a microarray dataset as an example for the differential testing. However, the overall approach is the same for other omics data along with recommended preparation strategies. 
-
-The analysis starts by loading the package and example dataset:
+The analysis starts by loading the ROTS package and the example dataset, which contains 1000 probesets and 10 samples:
 
 <<load>>=
 library(ROTS)
@@ -117,26 +91,23 @@ input = affySpikeIn
 dim(input)
 @
 
-In the next step we determine the experimental design for differential analysis. Please note that samples' order should be exactly the same as the groups vector defining as below:
+In the next step we determine the experimental design for differential expression analysis. Please note that the order of the samples in the data matrix should be exactly the same as the groups vector defined.
 
 <<>>=
 groups = c(rep(0,5), rep(1,5))
 groups
 @ 
 
-ROTS() function performs the final differential testing. The user needs to set the function parameters before running the test:
-
-Here is the function with defalut arguments:
-ROTS(data, groups, B, K, seed = NULL, a1 = NULL, a2 = NULL)
+The ROTS function performs the final differential expression testing. The user can set the function parameters before running the analysis:
 
 <<ROTS>>=
 results = ROTS(data = input, groups = groups , B = 100 , K = 500 , seed = 1234)
 names(results) 
 @
 
-In this example, number of bootstrapping (B) and number of top-ranked features for reproducibility optimization (K) are set to 100 and 500 respectively. Number of bootstrapping was set to 100 to reduce running time of the example. However, in real analysis it is preferred to be a higher number (e.g. between 500 to 1000). a1 and a2 are the optimization parameters and always shuold be non-negative. The output of ROTS function include: test statistic (d), estimated pvalue and False Discovery Rate (pvalue, FDR), optimized test statistic parameters and largest top list size (a1, a2, k), optimized reproducibility value (R) and Z-score (Z). In general, the Z-score and reproducibility are the main indicators to decide the success of differential expression analysis. As a rule of thumb, reproducibility Z-scores below 2 indicate that the data or the statistics are not sufficient for reliable detection.\\[1em]
+In this example, we set the number of bootstrapping (B) and the number of top-ranked features for reproducibility optimization (K) to 100 and 500 respectively, to reduce running time of the example. In real analysis it is preferred to use a higher number of bootstraps (e.g. 1000). The optimization parameters a1 and a2 should always be non-negative. The output of ROTS function includes test statistic (d), estimated \textit{p}-value (pvalue), False Discovery Rate (FDR), optimized test statistic parameters and top list size (a1, a2, k), optimized reproducibility value (R) and Z-score (Z). In general, the Z-score and reproducibility are the main indicators to decide the success of differential expression analysis. As a rule of thumb, reproducibility Z-scores below 2 indicate that the data or the statistics are not sufficient for reliable detection.\\[1em]
 
-Finally, it is possible to summary the results based on user's selected criteria. For instance, following code with subset the top ranked differentially expressed features with FDR cutoff less than 0.05:
+Finally, it is possible to summarize the results based on criteria selected by the user. For instance, the following code lists the top ranked differentially expressed features with FDR below 0.05:
 
 <<summary>>=
 resFiltered = summary(results , fdr = 0.05)
@@ -144,8 +115,7 @@ head(resFiltered)
 nrow(resFiltered)
 @
 
-Based on the selected cutoff (fdr < 0.05), 622 features fulfill the criteria. In this summary, ROTS-statistic can be used as the indicator of genomic feature regulation (e.g. whether it is up or down regulated). Moreover, the reported R value(denoting the reproducibility of the results) should be under consideration. We suggest that the results of the experiment are reliale if the R value is greater than 0.50.
-
+Based on the selected cutoff (fdr < 0.05), 53 features fulfill the criteria.
 
 \section{References}
 
