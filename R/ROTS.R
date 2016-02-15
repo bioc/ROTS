@@ -1,5 +1,5 @@
 `ROTS` <-
-  function(data, groups, B, K, seed=NULL, a1=NULL, a2=NULL) {
+  function(data, groups, B, K, paired=FALSE, seed=NULL, a1=NULL, a2=NULL) {
     if (is(data, "ExpressionSet"))
            data <- Biobase::exprs(data)  
     ## Set random number generator seed for reproducibility
@@ -31,6 +31,12 @@
            please remove these rows.")
     data <- cbind(data1,data2)
     cl <- c(rep(1, ncol(data1)), rep(2, ncol(data2)))
+	
+    ## Check number of samples for paired test
+    if(paired) {
+      if(ncol(data1)!=ncol(data2)) stop("Uneven number of samples for paired test.")
+    }
+	
     ## Free up memory
     rm(data1, data2)
     gc()
@@ -39,7 +45,7 @@
  
     ## Bootstrap samples
     message("Bootstrapping samples")
-    samples <- bootstrapSamples(data, 2*B, cl)
+    samples <- bootstrapSamples(data, 2*B, cl, paired)
     ## Permutated samples
     pSamples <- permutatedSamples(data, nrow(samples), cl)
     
@@ -58,12 +64,12 @@
       ## If a1 and a2 parameters are given, we don't need the bootstrap
       ## dataset
       if( is.null(a1) | is.null(a2) ){
-        fit <- testStatistic(data[, samples.R[[1]]], data[, samples.R[[2]]] )
+        fit <- testStatistic(data[, samples.R[[1]]], data[, samples.R[[2]]], paired)
         D[,i] <- fit$d
         S[,i] <- fit$s
       }
       
-      pFit <- testStatistic(data[, pSamples.R[[1]]], data[, pSamples.R[[2]]] )
+      pFit <- testStatistic(data[, pSamples.R[[1]]], data[, pSamples.R[[2]]], paired)
       pD[,i] <- pFit$d
       pS[,i] <- pFit$s
     }
@@ -169,7 +175,7 @@
       rm(reprotable.P, reprotable.sd)
       gc()
       
-      sel <- which(ztable == max(ztable), arr.ind=TRUE)
+	  sel <- which(ztable == max(ztable[is.finite(ztable)]), arr.ind=TRUE)
       ## Sel is a matrix containing the location(s) of the largest value (row,
       ## col). If the location of the largest value is not unique then nrow(sel)
       ## > 2 (length(sel) > 2)
@@ -194,7 +200,7 @@
       
       ## Calculate the reproducibility-optimized test statistic based on the
       ## reproducibility-maximizing a1, a2 and k values and the corresponding FDR
-      fit <- testStatistic(data[,cl==1], data[,cl==2])
+      fit <- testStatistic(data[,cl==1], data[,cl==2], paired)
       d <- fit$d / (a1 + a2 * fit$s)
       pD <- pD/(a1 + a2 * pS)
       
@@ -228,10 +234,10 @@
     else{ # !is.null(a1 & !is.null(a2)
       ## Calculate statistic based on the given parameter values
       ## and the corresponding FDR
-      fit <- testStatistic(data[,cl==1], data[,cl==2])
+      fit <- testStatistic(data[,cl==1], data[,cl==2], paired)
       d <- fit$d / (a1 + a2 * fit$s)
       message("Calculating p-values")
-      p <- calculateP(d, pD)
+      p <- calculateP(d, pD/(a1 + a2 * pS))
       message("Calculating FDR")
       FDR <- calculateFDR(d, pD/(a1 + a2 * pS))
       

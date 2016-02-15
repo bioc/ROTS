@@ -10,7 +10,7 @@
 }
 
 \usage{
-ROTS(data, groups, B, K, seed = NULL, a1 = NULL, a2 = NULL)
+ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL)
 }
 \arguments{
 
@@ -20,6 +20,7 @@ ROTS(data, groups, B, K, seed = NULL, a1 = NULL, a2 = NULL)
 	\item{B}{an integer specifying the number of bootstrap and permutation
 		resamplings. }
 	\item{K}{an integer indicating the largest top list size considered. }
+	\item{paired}{ a logical indicating whether a paired test is performed.}
 	\item{seed}{ an integer seed for the random number generator. }
   \item{a1, a2}{ a non-negative parameter. See details section for
 		further information.}

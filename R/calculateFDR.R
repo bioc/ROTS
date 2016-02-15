@@ -18,4 +18,3 @@ function(observed, permuted) {
 	
    return(FDR)
 }
-
