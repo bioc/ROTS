@@ -37,6 +37,12 @@
       if(ncol(data1)!=ncol(data2)) stop("Uneven number of samples for paired test.")
     }
 	
+    ## Calculate fold change
+    if (any(data>50)) {
+      warning("Input data might not be in log2 scale.")
+    }
+    logfc <- rowMeans(data1, na.rm=FALSE) - rowMeans(data2, na.rm=FALSE)
+    
     ## Free up memory
     rm(data1, data2)
     gc()
@@ -219,16 +225,17 @@
       gc()
       
       ROTS.output <- list(
-        data = data,# The original data and ...
-        B = B,      # ...the number of resamplings
-        d = d,      # ...the ROTS-statistic
-        pvalue = p,		# ...the corresponding P value
-        FDR = FDR,  # ...the corresponding FDR
-        a1 = a1,    # ...the corresponding a1
-        a2 = a2,    # ...the corresponding a2
-        k = k,      # ...the corresponding top list size
-        R = R,	    # ...the corresponding reproducibility value
-        Z = Z)		# ...the corresponding z-score
+        data = data,   # The original data and ...
+        B = B,         # ...the number of resamplings
+        d = d,         # ...the ROTS-statistic
+        logfc = logfc, # ...the fold change
+        pvalue = p,	   # ...the corresponding P value
+        FDR = FDR,     # ...the corresponding FDR
+        a1 = a1,       # ...the corresponding a1
+        a2 = a2,       # ...the corresponding a2
+        k = k,         # ...the corresponding top list size
+        R = R,	       # ...the corresponding reproducibility value
+        Z = Z)		     # ...the corresponding z-score
     }
     
     else{ # !is.null(a1 & !is.null(a2)
@@ -242,19 +249,20 @@
       FDR <- calculateFDR(d, pD/(a1 + a2 * pS))
       
       ROTS.output <- list(
-         data = data,# The original data and ...
-        B = B,		# ...the number of resamplings
-        d = d,		# ...the ROTS-statistic
-        pvalue = p,		# ...the corresponding P value
-        FDR = FDR,	# ...the corresponding FDR
-        a1 = a1,	# ...the corresponding a1
-        a2 = a2,	# ...the corresponding a2
-        k = NULL,	# ...the corresponding top list size
-        R = NULL,	# ...the corresponding reproducibility value
-        Z = NULL)	# ...the corresponding z-score
+        data = data,   # The original data and ...
+        B = B,		     # ...the number of resamplings
+        d = d,		     # ...the ROTS-statistic
+        logfc = logfc, # ...the fold change
+        pvalue = p,	   # ...the corresponding P value
+        FDR = FDR,	   # ...the corresponding FDR
+        a1 = a1,	     # ...the corresponding a1
+        a2 = a2,	     # ...the corresponding a2
+        k = NULL,	     # ...the corresponding top list size
+        R = NULL,	     # ...the corresponding reproducibility value
+        Z = NULL)	     # ...the corresponding z-score
     }
     
     ## Define the class
-    class( ROTS.output ) <- "ROTS"
-    return(ROTS.output) 
+    class(ROTS.output) <- "ROTS"
+    return(ROTS.output)
   }
