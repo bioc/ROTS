@@ -1,5 +1,5 @@
 `ROTS` <-
-  function(data, groups, B, K, paired=FALSE, seed=NULL, a1=NULL, a2=NULL) {
+  function(data, groups, B, K, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE) {
     if (is(data, "ExpressionSet"))
            data <- Biobase::exprs(data)  
     ## Set random number generator seed for reproducibility
@@ -38,10 +38,16 @@
     }
 	
     ## Calculate fold change
-    if (any(data>50)) {
-      warning("Input data might not be in log2 scale.")
+    if(log) {
+      if (any(data>1023)) {
+        warning("Input data might not be in log2 scale.")
+        logfc <- rowMeans(data1, na.rm=FALSE) - rowMeans(data2, na.rm=FALSE)
+      } else {
+        logfc <- log2(rowMeans(2^data1, na.rm=FALSE)) - log2(rowMeans(2^data2, na.rm=FALSE))
+      }
+    } else {
+      logfc <- log2(rowMeans(data1, na.rm=FALSE)) - log2(rowMeans(data2, na.rm=FALSE))
     }
-    logfc <- rowMeans(data1, na.rm=FALSE) - rowMeans(data2, na.rm=FALSE)
     
     ## Free up memory
     rm(data1, data2)

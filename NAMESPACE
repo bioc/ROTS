@@ -1,5 +1,6 @@
-## Export only functions ROTS and print.ROTS from the ROTS-package
+## Export functions from the ROTS-package
 export(ROTS, print.ROTS, summary.ROTS)
+S3method(plot, ROTS)
 
 ## Load  shared library ROTS.so/dll
 useDynLib(ROTS)

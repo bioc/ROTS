@@ -10,20 +10,22 @@
 }
 
 \usage{
-ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL)
+ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE)
 }
 \arguments{
 
-  \item{data}{ a numeric data matrix or an ExpressionSet instance, in which rows correspond to genes
-		and columns correspond to samples.}
+	\item{data}{ a numeric data matrix or an ExpressionSet instance, in which rows correspond to genes
+		and columns correspond to samples. }
 	\item{groups}{ a vector indicating the sample groups. }
 	\item{B}{an integer specifying the number of bootstrap and permutation
 		resamplings. }
 	\item{K}{an integer indicating the largest top list size considered. }
 	\item{paired}{ a logical indicating whether a paired test is performed.}
 	\item{seed}{ an integer seed for the random number generator. }
-  \item{a1, a2}{ a non-negative parameter. See details section for
-		further information.}
+	\item{a1, a2}{ a non-negative parameter. See details section for
+		further information. }
+	\item{log}{ a logical indicating whether input data is log2 scaled. }
+	
 }
 
 \details{ The reproducibility-optimization procedure ROTS enables the
