@@ -39,7 +39,7 @@
 	
     ## Calculate fold change
     if(log) {
-      if (any(data>1023)) {
+      if (any(na.omit(data)>1023)) {
         warning("Input data might not be in log2 scale.")
         logfc <- rowMeans(data1, na.rm=FALSE) - rowMeans(data2, na.rm=FALSE)
       } else {

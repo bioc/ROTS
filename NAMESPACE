@@ -4,7 +4,7 @@ export(ROTS, print.ROTS, summary.ROTS, plot.ROTS)
 ## Load  shared library ROTS.so/dll
 useDynLib(ROTS)
 importFrom(Rcpp, evalCpp)
-importFrom(stats, median, heatmap)
+importFrom(stats, median, na.omit, heatmap)
 importFrom(graphics, plot, points)
 importFrom(grDevices, colorRampPalette)
 importFrom(methods, is)
