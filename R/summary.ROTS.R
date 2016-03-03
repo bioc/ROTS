@@ -22,7 +22,7 @@ function(object, fdr=NULL, num.genes=NULL, verbose=TRUE, ...){
 
     ## Show only num.gene top rows or rows whose false discovery rate <= fdr
     if(!is.null(fdr))
-      result <- result[ result[, 3] <= fdr, ,drop=FALSE]
+      result <- result[ result[,4] <= fdr, ,drop=FALSE]
     else
       result <- result[ 1 : min(num.genes, nrow(result)), ,drop=FALSE]
 

@@ -23,11 +23,12 @@ ROTS: Reproducibility Optimized Test Statistic
 \author{Fatemeh Seyednasrollah$^{*}$, Tomi Suomi, Laura L. Elo 
 \\[1em] {\texttt{$^*$fatsey (at) utu.fi}}}
 
-\date{February 1, 2016}
+\date{March 3, 2016}
 
 \setlength\parindent{0pt}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
+\setkeys{Gin}{width=0.6\textwidth}
 
 \maketitle
 
@@ -80,21 +81,20 @@ For count-based data, we recommend the widely used preprocessing techniques like
 
 \section{Differential expression testing}
 
-We use here a microarray dataset as an example for differential expression testing. The overall approach is the same for other omics data along with recommended preprocessing strategies. \\[1em]
+We use here a proteomics dataset as an example for differential expression testing. The overall approach is the same for other omics data along with recommended preprocessing strategies. \\[1em]
 
-The analysis starts by loading the ROTS package and the example dataset, which contains 1000 probesets and 10 samples:
+The analysis starts by loading the ROTS package and the example dataset, which contains two sample groups each having three replicates:
 
 <<load>>=
 library(ROTS)
-data(affySpikeIn)
-input = affySpikeIn
-dim(input)
+data(upsSpikeIn)
+input = upsSpikeIn
 @
 
 In the next step we determine the experimental design for differential expression analysis. Please note that the order of the samples in the data matrix should be exactly the same as the groups vector defined.
 
 <<>>=
-groups = c(rep(0,5), rep(1,5))
+groups = c(rep(0,3), rep(1,3))
 groups
 @ 
 
@@ -110,12 +110,21 @@ In this example, we set the number of bootstrapping (B) and the number of top-ra
 Finally, it is possible to summarize the results based on criteria selected by the user. For instance, the following code lists the top ranked differentially expressed features with FDR below 0.05:
 
 <<summary>>=
-resFiltered = summary(results , fdr = 0.05)
-head(resFiltered)
-nrow(resFiltered)
+summary(results, fdr = 0.05)
 @
 
-Based on the selected cutoff (fdr < 0.05), 53 features fulfill the criteria.
+\newpage
+\section{Visualization}
+
+Results can also be visualized using the standard plot command:
+
+<<volcano, fig=TRUE>>=
+plot(results, fdr = 0.05)
+@
+
+<<heatmap, fig=TRUE>>=
+plot(results, fdr = 0.05, type = "heatmap")
+@
 
 \section{References}
 
@@ -141,8 +150,6 @@ Based on the selected cutoff (fdr < 0.05), 53 features fulfill the criteria.
   \emph{Optimization of Statistical Methods Impact on Quantitative Proteomics Data}.
   J. Proteome Res.,
   2015.
-  
-
-
+ 
 
 \end{document}

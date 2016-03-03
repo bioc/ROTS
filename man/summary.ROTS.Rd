@@ -2,26 +2,22 @@
 \alias{summary.ROTS}
 \title{ Summary of a ROTS object }
 \description{
-  Summarizes the differentisl testing resutls from ROTS package.
+  Summarizes the differential testing results from ROTS package.
 }
 \usage{
-  \method{summary}{ROTS}(object,
-        fdr = NULL,
-        num.genes = NULL,
-        verbose = TRUE,
-        ...)
+  \method{summary}{ROTS}(object, fdr=NULL, num.genes=NULL, verbose=TRUE, ...)
 }
 
 \arguments{
   \item{object}{a \code{ROTS} object created from differential expression testing run by ROTS.}
   \item{fdr}{ selected cutoff for FDR value.}
   \item{num.genes}{ selected cutoff number for number of differentially detected features. }
-  \item{verbose}{ If TRUE (default), summary function will print out 10 first detections fulfill the cutoff criteria. }
+  \item{verbose}{ If TRUE (default), summary function will print out 10 first detections which fulfill the cutoff criteria. }
   \item{...}{ other arguments passed to the summary function. }
 }
 
 \details{
-  This fucntion returns the summary information (including row number, test-statistic, pvalue and FDR value)
+  This function returns the summary information (including row number, test-statistic, pvalue and FDR value)
   for the selected features.}
 
 \value{
@@ -30,7 +26,7 @@ Returns a matrix where the rows are the selected features and columns are the Ro
 
 \references{
   L. L. Elo, S. Filen, R. Lahesmaa and T. Aittokallio:
-    Reproducibility-optimized test statistic for ranking genes in
+  Reproducibility-optimized test statistic for ranking genes in
   microarray studies. IEEE/ACM Transactions on Computational Biology and
   Bioinformatics 5: 423--431, 2008.
 }
