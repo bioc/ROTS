@@ -1,5 +1,5 @@
 `ROTS` <-
-  function(data, groups, B, K, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE) {
+  function(data, groups, B, K, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE) {
     if (is(data, "ExpressionSet"))
            data <- Biobase::exprs(data)  
     ## Set random number generator seed for reproducibility
@@ -69,7 +69,8 @@
     pD <- matrix(nrow = nrow(as.matrix(data)), ncol = nrow(samples))
     pS <- matrix(nrow = nrow(as.matrix(data)), ncol = nrow(samples))
     
-    for ( i in seq_len(nrow(samples)) ){
+    if (progress) pb <- txtProgressBar(min=0, max=nrow(samples), style=3)
+    for (i in seq_len(nrow(samples))) {
       samples.R <- split(samples[i,], cl)
       pSamples.R <- split(pSamples[i,], cl)
       
@@ -84,7 +85,10 @@
       pFit <- testStatistic(data[, pSamples.R[[1]]], data[, pSamples.R[[2]]], paired)
       pD[,i] <- pFit$d
       pS[,i] <- pFit$s
+      
+      if (progress) setTxtProgressBar(pb, i)
     }
+    if (progress) close(pb)
     
     ## Free up memory
     rm(samples, pSamples)
@@ -124,6 +128,7 @@
       colnames(reprotable.sd) <- N
       row.names(reprotable.sd) <- c(ssq, "slr")
       
+      if (progress) pb <- txtProgressBar(min=0, max=length(ssq), style=3)
       for(i in 1 : length(ssq)){
         ## The overlaps between bootstrap samples. Rows correspond to different
         ## bootrsrap samples and columns corrospond to different top list size.
@@ -150,8 +155,9 @@
         reprotable.sd[i,] <- sqrt(rowSums((t(cResults[["overlaps"]]) - reprotable[i,])^2) /
                                     (nrow(cResults[["overlaps"]]) - 1)) 
         
-        
+        if (progress) setTxtProgressBar(pb, i)
       }
+      if (progress) close(pb)
       
       i <- length(ssq) + 1
       
@@ -224,7 +230,7 @@
       p <- calculateP(d, pD)
       
       message("Calculating FDR")
-      FDR <- calculateFDR(d, pD)
+      FDR <- calculateFDR(d, pD, progress)
       
       ## Free up memory
       rm(pD)

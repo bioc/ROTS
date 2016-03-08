@@ -10,7 +10,7 @@
 }
 
 \usage{
-ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE)
+ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE)
 }
 \arguments{
 
@@ -25,6 +25,7 @@ ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log 
 	\item{a1, a2}{ a non-negative parameter. See details section for
 		further information. }
 	\item{log}{ a logical indicating whether input data is log2 scaled. }
+	\item{progress}{ a logical indicating if additional progress bars are shown. }
 	
 }
 
