@@ -41,12 +41,12 @@
     if(log) {
       if (any(na.omit(data)>1023)) {
         warning("Input data might not be in log2 scale.")
-        logfc <- rowMeans(data1, na.rm=FALSE) - rowMeans(data2, na.rm=FALSE)
+        logfc <- rowMeans(data1, na.rm=TRUE) - rowMeans(data2, na.rm=TRUE)
       } else {
-        logfc <- log2(rowMeans(2^data1, na.rm=FALSE)) - log2(rowMeans(2^data2, na.rm=FALSE))
+        logfc <- log2(rowMeans(2^data1, na.rm=TRUE)) - log2(rowMeans(2^data2, na.rm=TRUE))
       }
     } else {
-      logfc <- log2(rowMeans(data1, na.rm=FALSE)) - log2(rowMeans(data2, na.rm=FALSE))
+      logfc <- log2(rowMeans(data1, na.rm=TRUE)) - log2(rowMeans(data2, na.rm=TRUE))
     }
     
     ## Free up memory
