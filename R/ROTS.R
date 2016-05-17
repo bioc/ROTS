@@ -46,7 +46,7 @@
         logfc <- log2(rowMeans(2^data1, na.rm=TRUE)) - log2(rowMeans(2^data2, na.rm=TRUE))
       }
     } else {
-      logfc <- log2(rowMeans(data1, na.rm=TRUE)) - log2(rowMeans(data2, na.rm=TRUE))
+      logfc <- log2(rowMeans(data1+1, na.rm=TRUE)) - log2(rowMeans(data2+1, na.rm=TRUE))
     }
     
     ## Free up memory
