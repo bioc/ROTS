@@ -24,7 +24,7 @@ ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log 
 	\item{seed}{ an integer seed for the random number generator. }
 	\item{a1, a2}{ a non-negative parameter. See details section for
 		further information. }
-	\item{log}{ a logical indicating whether input data is log2 scaled. }
+	\item{log}{ a logical (the deafult is TRUE) indicating whether input data is log2 scaled. }
 	\item{progress}{ a logical indicating if additional progress bars are shown. }
 	
 }
@@ -58,7 +58,10 @@ ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log 
   non-missing values should be removed; or alternatively, the missing data
   entries can be imputed using, e.g., the K-nearest neighbour
   imputation, which is implemented in the Bioconductor package
-  \code{impute}.
+  \code{impute}. ROTS assumes the input data matrix is log2 transformed 
+  (the default for log parameter is set to TRUE). Although, this only 
+  affects fold change values, we recommend setting log parameter to FALSE 
+  if the input matrix is not log transformed to avoid downstream confusions.   
 	
 	If the parameter values a1 and a2 are set by the user, then no
 	optimization is	performed but the statistic and FDR-values are
