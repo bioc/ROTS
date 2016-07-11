@@ -14,18 +14,19 @@ ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log 
 }
 \arguments{
 
-	\item{data}{ a numeric data matrix or an ExpressionSet instance, in which rows correspond to genes
-		and columns correspond to samples. }
-	\item{groups}{ a vector indicating the sample groups. }
-	\item{B}{an integer specifying the number of bootstrap and permutation
-		resamplings. }
-	\item{K}{an integer indicating the largest top list size considered. }
-	\item{paired}{ a logical indicating whether a paired test is performed.}
-	\item{seed}{ an integer seed for the random number generator. }
-	\item{a1, a2}{ a non-negative parameter. See details section for
-		further information. }
-	\item{log}{ a logical (the deafult is TRUE) indicating whether input data is log2 scaled. }
-	\item{progress}{ a logical indicating if additional progress bars are shown. }
+	\item{data}{A numeric data matrix or an ExpressionSet instance, in which rows correspond to genes
+		and columns correspond to samples.}
+	\item{groups}{A vector indicating the sample groups.}
+	\item{B}{An integer specifying the number of bootstrap and permutation
+		resamplings.}
+	\item{K}{An integer indicating the largest top list size considered.}
+	\item{paired}{A logical indicating whether a paired test is performed.
+		The samples are expected to be in the same order in both groups.}
+	\item{seed}{An integer seed for the random number generator.}
+	\item{a1, a2}{Non-negative parameters. See details section for further information.}
+	\item{log}{A logical (deafult TRUE) indicating whether input data is log2 scaled.
+		This information is only used to calculate log fold change.}
+	\item{progress}{A logical indicating if additional progress bars are shown.}
 	
 }
 

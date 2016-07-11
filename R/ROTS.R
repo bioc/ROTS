@@ -213,7 +213,7 @@
       Z <- ztable[sel[1],sel[2]]
       
       ## Free up memory
-      rm(reprotable, ztable)
+      rm(reprotable)
       gc()
       
       ## Calculate the reproducibility-optimized test statistic based on the
@@ -237,17 +237,18 @@
       gc()
       
       ROTS.output <- list(
-        data = data,   # The original data and ...
-        B = B,         # ...the number of resamplings
-        d = d,         # ...the ROTS-statistic
-        logfc = logfc, # ...the fold change
-        pvalue = p,	   # ...the corresponding P value
-        FDR = FDR,     # ...the corresponding FDR
-        a1 = a1,       # ...the corresponding a1
-        a2 = a2,       # ...the corresponding a2
-        k = k,         # ...the corresponding top list size
-        R = R,	       # ...the corresponding reproducibility value
-        Z = Z)		     # ...the corresponding z-score
+        data = data,     # The original data and ...
+        B = B,           # ...the number of resamplings
+        d = d,           # ...the ROTS-statistic
+        logfc = logfc,   # ...the fold change
+        pvalue = p,	     # ...the corresponding P value
+        FDR = FDR,       # ...the corresponding FDR
+        a1 = a1,         # ...the corresponding a1
+        a2 = a2,         # ...the corresponding a2
+        k = k,           # ...the corresponding top list size
+        R = R,	         # ...the corresponding reproducibility value
+        Z = Z,	         # ...the corresponding z-score
+        ztable = ztable) # ...the corresponding z-score table
     }
     
     else{ # !is.null(a1 & !is.null(a2)
@@ -258,7 +259,7 @@
       message("Calculating p-values")
       p <- calculateP(d, pD/(a1 + a2 * pS))
       message("Calculating FDR")
-      FDR <- calculateFDR(d, pD/(a1 + a2 * pS))
+      FDR <- calculateFDR(d, pD/(a1 + a2 * pS), progress)
       
       ROTS.output <- list(
         data = data,   # The original data and ...
