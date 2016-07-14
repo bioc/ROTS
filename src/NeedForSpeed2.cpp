@@ -90,9 +90,10 @@ List NeedForSpeed2( SEXP D, SEXP pD, SEXP nrow,
      calculateOverlap_2( pres1, pres2, nrow_ovlp, N_ovlp, N_len_ovlp, b, B_ovlp, overlaps_P_ovlp );
 
     }
-          return Rcpp::List::create(
+    delete[] res1; delete[] res2; delete[] pres1; delete[] pres2;
+    
+    return Rcpp::List::create(
         Rcpp::Named("overlaps") = overlaps_ovlp ,
         Rcpp::Named("overlaps_P") = overlaps_P_ovlp ) ;
-
-		delete[] res1; delete[] res2; delete[] pres1; delete[] pres2;
+	
   }
