@@ -119,7 +119,7 @@ summary(results, fdr = 0.05)
 Results can also be visualized using the standard plot command:
 
 <<volcano, fig=TRUE>>=
-plot(results, fdr = 0.05)
+plot(results, fdr = 0.05, type = "volcano")
 @
 
 <<heatmap, fig=TRUE>>=

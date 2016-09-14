@@ -237,18 +237,19 @@
       gc()
       
       ROTS.output <- list(
-        data = data,     # The original data and ...
-        B = B,           # ...the number of resamplings
-        d = d,           # ...the ROTS-statistic
-        logfc = logfc,   # ...the fold change
-        pvalue = p,	     # ...the corresponding P value
-        FDR = FDR,       # ...the corresponding FDR
-        a1 = a1,         # ...the corresponding a1
-        a2 = a2,         # ...the corresponding a2
-        k = k,           # ...the corresponding top list size
-        R = R,	         # ...the corresponding reproducibility value
-        Z = Z,	         # ...the corresponding z-score
-        ztable = ztable) # ...the corresponding z-score table
+        data = data,     # Original data
+        B = B,           # Number of resamplings
+        d = d,           # ROTS-statistic
+        logfc = logfc,   # Fold change
+        pvalue = p,	     # p-value
+        FDR = FDR,       # FDR
+        a1 = a1,         # a1
+        a2 = a2,         # a2
+        k = k,           # top list size
+        R = R,	         # reproducibility value
+        Z = Z,	         # z-score
+        ztable = ztable, # z-score table
+        cl = cl)         # classes
     }
     
     else{ # !is.null(a1 & !is.null(a2)
@@ -262,17 +263,18 @@
       FDR <- calculateFDR(d, pD/(a1 + a2 * pS), progress)
       
       ROTS.output <- list(
-        data = data,   # The original data and ...
-        B = B,		     # ...the number of resamplings
-        d = d,		     # ...the ROTS-statistic
-        logfc = logfc, # ...the fold change
-        pvalue = p,	   # ...the corresponding P value
-        FDR = FDR,	   # ...the corresponding FDR
-        a1 = a1,	     # ...the corresponding a1
-        a2 = a2,	     # ...the corresponding a2
-        k = NULL,	     # ...the corresponding top list size
-        R = NULL,	     # ...the corresponding reproducibility value
-        Z = NULL)	     # ...the corresponding z-score
+        data = data,   # Original data
+        B = B,		     # Number of resamplings
+        d = d,		     # ROTS-statistic
+        logfc = logfc, # Fold change
+        pvalue = p,	   # p-value
+        FDR = FDR,	   # FDR
+        a1 = a1,	     # a1
+        a2 = a2,	     # a2
+        k = NULL,	     # top list size
+        R = NULL,	     # reproducibility value
+        Z = NULL,	     # z-score
+        cl = cl)       # classes
     }
     
     ## Define the class
