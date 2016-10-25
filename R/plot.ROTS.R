@@ -49,8 +49,8 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
   
   # Reproducibility
   if(type=="reproducibility") {
-    z <- x$ztable[row.names(x$ztable)==x$a1,]
-    k <- as.numeric(colnames(x$ztable))
+	z <- c(0,x$ztable[row.names(x$ztable)==x$a1,])
+	k <- c(0,as.numeric(colnames(x$ztable)))
     plot(k, z, pch=20, xlab="Top list size", ylab="Reproducibility Z-score", cex=0.5, panel.first=lines(k, z, col="grey"), bty="l")
     points(k[which(z==max(z))], z[which(z==max(z))], pch=21, col="red")
     text(k[which(z==max(z))], z[which(z==max(z))], labels=round(max(z),digits=3), pos=4)

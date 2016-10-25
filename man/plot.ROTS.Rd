@@ -10,7 +10,7 @@
 \arguments{
   \item{x}{A \code{ROTS} object created from differential expression testing run by ROTS.}
   \item{fdr}{Selected cutoff for FDR value.}
-  \item{type}{Type of plot to be created. Options are The options are: volcano, heatmap, ma, reproducibility, pvalue, pca.}
+  \item{type}{Type of plot to be created. Options are: 'volcano', 'heatmap', 'ma', 'reproducibility', 'pvalue', 'pca'.}
   \item{labels}{Option to print labels for differentially expressed features.}
   \item{...}{Other arguments passed to the plot function.}
 }
