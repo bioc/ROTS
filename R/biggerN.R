@@ -10,4 +10,3 @@ function(x, y) {
  
    return(d - a + b)
 }
-
