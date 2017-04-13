@@ -67,7 +67,7 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
     if(length(de)>0) {
       pca <- prcomp(t(x$data[de,]), center=TRUE, scale.=TRUE)
       par(xpd=TRUE)
-      plot(pca$x[,1], pca$x[,2], xlab="PC1", ylab="PC2", pch=20, cex=2, col= x$cl, bty="l")
+      plot(pca$x[,1], pca$x[,2], xlab="Principal component 1", ylab="Principal component 2", pch=20, cex=2, col= x$cl, bty="l")
       if (labels==TRUE) {
         text(pca$x[,1], pca$x[,2], labels=colnames(x$data), pos=3, cex=1)
       }
