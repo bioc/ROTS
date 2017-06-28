@@ -1,5 +1,5 @@
 `ROTS` <-
-  function(data, groups, B, K, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE) {
+  function(data, groups, B=1000, K=NULL, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE) {
     if (is(data, "ExpressionSet"))
            data <- Biobase::exprs(data)  
     ## Set random number generator seed for reproducibility
@@ -11,9 +11,15 @@
     if(is.null(rownames(data)))
       rownames(data) <- 1:nrow(data)
     
-    ##  the reproducibility values in a dense lattice
+    ##  The reproducibility values in a dense lattice
     ssq <- c( (0:20) / 100, (11:50) / 50, (6:25) / 5)
     N <- c( (1:20) * 5, (11:50) * 10, (21:40) * 25, (11:1000) * 100)
+    
+    ## Check for top list size
+    if (is.null(K)) {
+      K <- floor(nrow(data)/4)
+      message(paste("No top list size K given, using",K))
+    }
     
     ## The top list size cannot be larger than the total number of genes
     K <- min(K,nrow(data))

@@ -10,16 +10,17 @@
 }
 
 \usage{
-ROTS(data, groups, B, K, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE)
+ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE)
 }
 \arguments{
 
-	\item{data}{A numeric data matrix or an ExpressionSet instance, in which rows correspond to genes
-		and columns correspond to samples.}
+	\item{data}{A numeric data matrix or an ExpressionSet instance, in which rows correspond
+		to genes and columns correspond to samples.}
 	\item{groups}{A vector indicating the sample groups.}
 	\item{B}{An integer specifying the number of bootstrap and permutation
-		resamplings.}
-	\item{K}{An integer indicating the largest top list size considered.}
+		resamplings (default 1000).}
+	\item{K}{An integer indicating the largest top list size considered. If no value is given,
+		1/4 of the features are used.}
 	\item{paired}{A logical indicating whether a paired test is performed.
 		The samples are expected to be in the same order in both groups.}
 	\item{seed}{An integer seed for the random number generator.}
