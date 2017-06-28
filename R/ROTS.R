@@ -20,38 +20,39 @@
     N <- N[N < K]
     
     ## Reorder the data according to the group labels and check for NA rows.
-    data1 <- data[, groups == unique(groups)[1]]
-    data2 <- data[, groups == unique(groups)[2]]
+    data <- data[,order(groups)]
+    groups <- sort(groups)
     
-    if(any(rowSums(is.na(data1)) >= ncol(data1) - 1))
-      stop("The data matrix of group 1 contains rows with less than two non-missing values,
-           please remove these rows.")
-    if(any(rowSums(is.na(data2)) >= ncol(data2) - 1))
-      stop("The data matrix of group 2 contains rows with less than two non-missing values,
-           please remove these rows.")
-    data <- cbind(data1,data2)
-    cl <- c(rep(1, ncol(data1)), rep(2, ncol(data2)))
+    for (i in unique(groups)) {
+      if(any(rowSums(is.na(data[,which(groups==i)])) >= length(which(groups==i))-1)) {
+        stop(paste("The data matrix of group",i,"contains rows with less than two non-missing values, please remove these rows."))
+      }
+    }
+    
+    cl <- groups+(1-min(groups))
 	
     ## Check number of samples for paired test
-    if(paired) {
-      if(ncol(data1)!=ncol(data2)) stop("Uneven number of samples for paired test.")
+    if (paired) {
+      for (i in unique(cl)[-1]) {
+        if(length(which(cl==1))!=length(which(cl==i))) stop("Uneven number of samples for paired test.")
+      }
     }
 	
     ## Calculate fold change
-    if(log) {
-      if (any(na.omit(data)>1023)) {
-        warning("Input data might not be in log2 scale.")
-        logfc <- rowMeans(data1, na.rm=TRUE) - rowMeans(data2, na.rm=TRUE)
+    if (length(unique(cl))==2) {
+      if(log) {
+        if (any(na.omit(data)>1023)) {
+          warning("Input data might not be in log2 scale.")
+          logfc <- rowMeans(data[,which(cl==1)], na.rm=TRUE) - rowMeans(data[,which(cl==2)], na.rm=TRUE)
+        } else {
+          logfc <- log2(rowMeans(2^data[,which(cl==1)], na.rm=TRUE)) - log2(rowMeans(2^data[,which(cl==2)], na.rm=TRUE))
+        }
       } else {
-        logfc <- log2(rowMeans(2^data1, na.rm=TRUE)) - log2(rowMeans(2^data2, na.rm=TRUE))
+        logfc <- log2(rowMeans(data[,which(cl==1)]+1, na.rm=TRUE)) - log2(rowMeans(data[,which(cl==2)]+1, na.rm=TRUE))
       }
     } else {
-      logfc <- log2(rowMeans(data1+1, na.rm=TRUE)) - log2(rowMeans(data2+1, na.rm=TRUE))
+      logfc <- rep(NA,nrow(data))
     }
-    
-    ## Free up memory
-    rm(data1, data2)
-    gc()
     
     ## ---------------------------------------------------------------------------
  
@@ -77,12 +78,12 @@
       ## If a1 and a2 parameters are given, we don't need the bootstrap
       ## dataset
       if( is.null(a1) | is.null(a2) ){
-        fit <- testStatistic(data[, samples.R[[1]]], data[, samples.R[[2]]], paired)
+        fit <- testStatistic(paired, lapply(samples.R, function(x) data[,x]))
         D[,i] <- fit$d
         S[,i] <- fit$s
       }
       
-      pFit <- testStatistic(data[, pSamples.R[[1]]], data[, pSamples.R[[2]]], paired)
+      pFit <- testStatistic(paired, lapply(pSamples.R, function(x) data[,x]))
       pD[,i] <- pFit$d
       pS[,i] <- pFit$s
       
@@ -218,7 +219,7 @@
       
       ## Calculate the reproducibility-optimized test statistic based on the
       ## reproducibility-maximizing a1, a2 and k values and the corresponding FDR
-      fit <- testStatistic(data[,cl==1], data[,cl==2], paired)
+      fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
       d <- fit$d / (a1 + a2 * fit$s)
       pD <- pD/(a1 + a2 * pS)
       
@@ -255,7 +256,7 @@
     else{ # !is.null(a1 & !is.null(a2)
       ## Calculate statistic based on the given parameter values
       ## and the corresponding FDR
-      fit <- testStatistic(data[,cl==1], data[,cl==2], paired)
+      fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
       d <- fit$d / (a1 + a2 * fit$s)
       message("Calculating p-values")
       p <- calculateP(d, pD/(a1 + a2 * pS))

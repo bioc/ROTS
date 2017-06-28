@@ -15,6 +15,9 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
   
   # Volcano plot
   if(type=="volcano") {
+    if(length(unique(x$cl))!=2) {
+      stop(paste("Volcano plot not supported for for", length(unique(x$cl)), "classes."))
+    }
     par(xpd=TRUE)
     plot(x$logfc, -log10(x$pvalue), xlab="log2 fold change", ylab="-log10 p-value", pch=20, cex=0.5, bty="l")
     if(length(de)>0) {
@@ -28,12 +31,15 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
   # Heatmap
   if(type=="heatmap" & length(de)>0) {
     try({
-      heatmap(as.matrix(x$data[de,]), col=colorRampPalette(c("blue","white","red"))(512), ...)
+      heatmap(as.matrix(x$data[de,]), scale="row", col=colorRampPalette(c("blue","white","red"))(512), ...)
     },silent=TRUE)
   }
   
   # MA plot
   if(type=="ma") {
+    if(length(unique(x$cl))!=2) {
+      stop(paste("MA plot not supported for for", length(unique(x$cl)), "classes."))
+    }
     M <- x$logfc
     A <- 0.5*(rowMeans(x$data[,x$cl==1])+rowMeans(x$data[,x$cl==2]))
     par(xpd=TRUE)
@@ -54,7 +60,7 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
     plot(k, z, pch=20, xlab="Top list size", ylab="Reproducibility Z-score", cex=0.5, panel.first=lines(k, z, col="grey"), bty="l")
     points(k[which(z==max(z))], z[which(z==max(z))], pch=21, col="red")
     text(k[which(z==max(z))], z[which(z==max(z))], labels=round(max(z),digits=3), pos=4)
-    legend("bottomleft",c(paste("a1 =",x$a1),paste("a2 =",x$a2)), bty="n", inset=0.1, y.intersp=2)
+    legend("topright",c(paste("a1 =",x$a1),paste("a2 =",x$a2)), bty="n")
   }
   
   # Histogram of p-values
@@ -67,7 +73,7 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
     if(length(de)>0) {
       pca <- prcomp(t(x$data[de,]), center=TRUE, scale.=TRUE)
       par(xpd=TRUE)
-      plot(pca$x[,1], pca$x[,2], xlab="Principal component 1", ylab="Principal component 2", pch=20, cex=2, col= x$cl, bty="l")
+      plot(pca$x[,1], pca$x[,2], xlab="Principal component 1", ylab="Principal component 2", pch=20, cex=2, col=x$cl, bty="l")
       if (labels==TRUE) {
         text(pca$x[,1], pca$x[,2], labels=colnames(x$data), pos=3, cex=1)
       }

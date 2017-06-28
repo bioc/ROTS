@@ -1,26 +1,22 @@
 `bootstrapSamples` <-
 function(data, B, labels, paired){
-  l1 <- which(labels==1)
-  l2 <- which(labels==2)
   
-  samples <- matrix(nrow=B, ncol=length(l1)+length(l2))
+  samples <- matrix(nrow=B, ncol=length(labels))
+  
   for(i in 1:B){
-    j <- 1
-    while(j==1){
-      a1 <- sample(l1, length(l1), replace=TRUE)
-      j <- length(unique(a1))
+    for (label in unique(labels)) {
+      pos <- which(labels==label)
+      samples[i,pos] <- sample(pos, length(pos), replace=TRUE)
     }
-    
-    j <- 1
-    while(j==1){
-      a2 <- sample(l2, length(l2), replace=TRUE)
-      j <- length(unique(a2))
-    }
-    samples[i,] <- c(a1,a2)
   }
   
-  if(paired) {
-    samples[,(length(l1)+1):(length(l1)+length(l2))] <- samples[,1:length(l1)]+length(l1)
+  if (paired) {
+    for(i in 1:B){
+      for (label in unique(labels)[-1]) {
+        pos <- which(labels==label)
+        samples[i,pos] <- samples[i,which(labels==1)]+pos[1]-1
+      }
+    }
   }
   
   return(samples)
