@@ -6,7 +6,7 @@
 
 \description{ Calculates the reproducibility-optimized test statistic
 	(ROTS) for ranking genes in order of evidence for differential
-	expression in two-group comparisons.
+	expression in two-group or multi-group comparisons.
 }
 
 \usage{
