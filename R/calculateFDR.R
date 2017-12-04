@@ -11,13 +11,14 @@ function(observed, permuted, progress) {
    for(i in seq_len(ncol(A))) {
       a.rand <- sort(permuted[,i], decreasing=TRUE, na.last=TRUE)
       n.bigger <- biggerN(a, a.rand)
-      A[ord,i] <- n.bigger/(seq_along(a))
+      A[ord,i] <- n.bigger/seq_along(a)
       if (progress) setTxtProgressBar(pb, i)
    }
    if (progress) close(pb)
    
    FDR <- apply(A, 1, median)
    FDR[FDR>1] <- 1
+   FDR[ord] <- rev(sapply(length(FDR):1, function(x) return(min(FDR[ord][x:length(FDR)]))))
 	
    return(FDR)
 }
