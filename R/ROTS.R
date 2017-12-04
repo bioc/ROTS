@@ -6,6 +6,11 @@
     if(!is.null(seed))
       set.seed(seed, kind="default")
     
+    ## Check groups
+    if(length(groups)!=ncol(data)) {
+      stop(paste("Number of samples in the data does not match the groups."))
+    }
+	
     ## If rownames(data) == NULL, use integers as rownames. Summary function requires that
     ## the data matrix has rownames.
     if(is.null(rownames(data)))
@@ -47,14 +52,9 @@
     ## Calculate fold change
     if (length(unique(cl))==2) {
       if(log) {
-        if (any(na.omit(data)>1023)) {
-          warning("Input data might not be in log2 scale.")
-          logfc <- rowMeans(data[,which(cl==1)], na.rm=TRUE) - rowMeans(data[,which(cl==2)], na.rm=TRUE)
-        } else {
-          logfc <- log2(rowMeans(2^data[,which(cl==1)], na.rm=TRUE)) - log2(rowMeans(2^data[,which(cl==2)], na.rm=TRUE))
-        }
+        logfc <- rowMeans(data[,which(cl==1)], na.rm=TRUE) - rowMeans(data[,which(cl==2)], na.rm=TRUE)
       } else {
-        logfc <- log2(rowMeans(data[,which(cl==1)]+1, na.rm=TRUE)) - log2(rowMeans(data[,which(cl==2)]+1, na.rm=TRUE))
+        logfc <- rowMeans(log2(data[,which(cl==1)]+1), na.rm=TRUE) - rowMeans(log2(data[,which(cl==2)]+1), na.rm=TRUE)
       }
     } else {
       logfc <- rep(NA,nrow(data))
