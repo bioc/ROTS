@@ -1,5 +1,5 @@
 `ROTS` <-
-  function(data, groups, B=1000, K=NULL, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE) {
+  function(data, groups, B=1000, K=NULL, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE, verbose=TRUE) {
     if (is(data, "ExpressionSet"))
            data <- Biobase::exprs(data)  
     ## Set random number generator seed for reproducibility
@@ -23,7 +23,7 @@
     ## Check for top list size
     if (is.null(K)) {
       K <- floor(nrow(data)/4)
-      message(paste("No top list size K given, using",K))
+      if (verbose) message(paste("No top list size K given, using",K))
     }
     
     ## The top list size cannot be larger than the total number of genes
@@ -63,7 +63,7 @@
     ## ---------------------------------------------------------------------------
  
     ## Bootstrap samples
-    message("Bootstrapping samples")
+    if (verbose) message("Bootstrapping samples")
     samples <- bootstrapSamples(data, 2*B, cl, paired)
     ## Permutated samples
     pSamples <- permutatedSamples(data, nrow(samples), cl)
@@ -105,7 +105,7 @@
     
     if( is.null(a1) | is.null(a2) ){
       ## Optimize the parameters
-      message("Optimizing parameters")
+      if (verbose) message("Optimizing parameters")
       
       ## Calculate the reproducibility values for all the given a1-values and top
       ## list sizes in both bootstrap and permuted data and their standard
@@ -233,10 +233,10 @@
       rm(pS)
       gc()
       
-      message("Calculating p-values")
+      if (verbose) message("Calculating p-values")
       p <- calculateP(d, pD)
       
-      message("Calculating FDR")
+      if (verbose) message("Calculating FDR")
       FDR <- calculateFDR(d, pD, progress)
       
       ## Free up memory
@@ -264,9 +264,9 @@
       ## and the corresponding FDR
       fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
       d <- fit$d / (a1 + a2 * fit$s)
-      message("Calculating p-values")
+      if (verbose) message("Calculating p-values")
       p <- calculateP(d, pD/(a1 + a2 * pS))
-      message("Calculating FDR")
+      if (verbose) message("Calculating FDR")
       FDR <- calculateFDR(d, pD/(a1 + a2 * pS), progress)
       
       ROTS.output <- list(

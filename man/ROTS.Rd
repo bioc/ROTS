@@ -10,7 +10,7 @@
 }
 
 \usage{
-ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE)
+ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE)
 }
 \arguments{
 
@@ -28,6 +28,7 @@ ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a
 	\item{log}{A logical (deafult TRUE) indicating whether input data is log2 scaled.
 		This information is only used to calculate log fold change.}
 	\item{progress}{A logical indicating if additional progress bars are shown.}
+	\item{verbose}{A logical indicating if messages are shown.}
 	
 }
 
