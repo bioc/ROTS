@@ -1,0 +1,28 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Article",
+		 author = {Suomi, Tomi and Seyednasrollah, Fatemeh and Jaakkola, Maria K. and Faux, Thomas and Elo, Laura L.},
+		 doi = {10.1371/journal.pcbi.1005562},
+		 journal = {PLoS computational biology},
+		 month = {may},
+		 number = {5},
+		 pages = {e1005562},
+		 pmid = {28542205},
+		 title = {{ROTS: An R package for reproducibility-optimized statistical testing.}},
+		 url = {http://www.ncbi.nlm.nih.gov/pubmed/28542205},
+		 volume = {13},
+		 year = {2017}
+		 )
+
+bibentry(bibtype = "Article",
+		 author = {Elo, Laura L. and Fil{\'{e}}n, Sanna and Lahesmaa, Riitta and Aittokallio, Tero},
+		 doi = {10.1109/tcbb.2007.1078},
+		 journal = {IEEE/ACM transactions on computational biology and bioinformatics / IEEE, ACM},
+		 number = {3},
+		 pages = {423--31},
+		 pmid = {18670045},
+		 title = {{Reproducibility-optimized test statistic for ranking genes in microarray studies.}},
+		 url = {http://www.ncbi.nlm.nih.gov/pubmed/18670045},
+		 volume = {5},
+		 year = {2008})
