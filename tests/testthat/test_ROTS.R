@@ -27,9 +27,9 @@ test_that("Special cases", {
 
 test_that("Comparison to t-test", {
   rots.out <- ROTS(data=upsSpikeIn, groups=c(0,0,0,1,1,1), a1=0, a2=1, paired=FALSE, B=100, K=500, seed=1)$d
-  ttest.out <- genefilter::rowttests(as.matrix(upsSpikeIn),fac=factor(c(1,1,1,0,0,0)))$statistic
+  ttest.out <- apply(as.matrix(upsSpikeIn), 1, function(x) t.test(x[4:6],x[1:3],paired=FALSE)$statistic)
   expect_that(cor(rots.out,ttest.out), equals(1))
   rots.out <- ROTS(data=upsSpikeIn, groups=c(0,0,0,1,1,1), a1=0, a2=1, paired=TRUE, B=100, K=500, seed=1)$d
-  ttest.out <- genefilter::rowttests(as.matrix(upsSpikeIn[,4:6]-upsSpikeIn[,1:3]),fac=factor(c(0,0,0)))$statistic
+  ttest.out <- apply(as.matrix(upsSpikeIn), 1, function(x) t.test(x[4:6],x[1:3],paired=TRUE)$statistic)
   expect_that(cor(rots.out,ttest.out), equals(1))
 })
