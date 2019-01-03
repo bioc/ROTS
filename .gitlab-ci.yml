@@ -1,18 +1,8 @@
 image: rocker/rstudio
-
-stages:
-   - build
-   - check
-  
-build_pkg:
-   stage: build
+test:
    script:
     - R -e 'install.packages(c("testthat", "Rcpp", "stats"))'
     - R -e 'source("https://bioconductor.org/biocLite.R"); biocLite("Biobase")'
     - R CMD build . --no-build-vignettes --no-manual
-
-check_pkg:
-   stage: check
-   script:
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
     - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
