@@ -1,9 +1,18 @@
 image: rocker/rstudio
-test:
+
+stages:
+   - build
+   - check
+  
+build_pkg:
+   stage: build
    script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
-    - R -e 'install.packages(c("testthat", "Rcpp", "stats", "Biobase", "methods"))'
+    - R -e 'install.packages(c("testthat", "Rcpp", "stats"))'
+    - R -e 'source("https://bioconductor.org/biocLite.R"); biocLite("Biobase")'
     - R CMD build . --no-build-vignettes --no-manual
+
+check_pkg:
+   stage: check
+   script:
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
     - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
