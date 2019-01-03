@@ -1,69 +1,9 @@
-variables:
-  CODECOV_TOKEN: "CODECOV_TOKEN_STRING"
-  _R_CHECK_CRAN_INCOMING_: "false"
-  _R_CHECK_FORCE_SUGGESTS_: "true"
-  APT_PKGS: "libcurl4-openssl-dev libssh2-1-dev libssl-dev libxml2-dev zlib1g-dev git"
-
-before_script:
-  - apt-get update
-  - apt-get install -y --no-install-recommends ${APT_PKGS}
-  - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
-  - export PATH="/usr/local/lib/R/site-library/littler/examples/:${PATH}"
-  - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
-  - install2.r devtools
-  - r -e 'devtools::install_dev_deps()'
-
-r-release:
-  stage: test
-  tags:
-    - docker
-  image: rocker/r-ver:latest
-  script:
-    - r -e 'devtools::check(check_dir = ".")'
-  artifacts:
-    paths:
-      - "*.Rcheck"
-    name: logs
-    when: always
-
-r-devel:
-  stage: test
-  tags:
-    - docker
-  image: rocker/r-ver:devel
-  script:
-    - r -e 'devtools::check(check_dir = ".")'
-  artifacts:
-    paths:
-      - "*.Rcheck"
-    name: logs
-    when: always
-
-coverage:
-  stage: deploy
-  tags:
-    - docker
-  image: rocker/r-ver:latest
-  when: on_success
-  only:
-    - master
-  script:
-    - install2.r 'covr'
-    - r -e 'devtools::install()'
-    - r -e 'covr::codecov(type = c("tests", "examples"), quiet = FALSE)'
-
-pages:
-  stage: deploy
-  tags:
-    - docker
-  image: rocker/tidyverse:latest
-  script:
-    - install2.r pkgdown drat
-    - r -e 'devtools::install()'
-    - r -e 'pkgdown::build_site(override = list(destination = "public"))'
-    - mkdir -p public/drat
-    - r -e 'devtools::build(path = ".")'
-    - r -e 'drat::insertPackage(commandArgs(TRUE), "public/drat")' $(ls -1t *.tar.gz | head -n 1)
-  artifacts:
-    paths:
-      - public
+image: rocker/rstudio
+test:
+   script:
+	- apt-get update
+	- apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
+    - R -e 'install.packages(c("testthat", "Rcpp", "stats", "Biobase", "methods"))'
+    - R CMD build . --no-build-vignettes --no-manual
+    - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
+    - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
