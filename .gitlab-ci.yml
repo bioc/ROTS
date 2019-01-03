@@ -1,8 +1,8 @@
 image: rocker/rstudio
 test:
    script:
-	- apt-get update
-	- apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
+    - apt-get update
+    - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
     - R -e 'install.packages(c("testthat", "Rcpp", "stats", "Biobase", "methods"))'
     - R CMD build . --no-build-vignettes --no-manual
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
