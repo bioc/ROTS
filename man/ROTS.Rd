@@ -59,7 +59,7 @@ ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a
   procedure. However, each row of the data matrix must contain
   at least two values in both groups. The rows containing only a few
   non-missing values should be removed; or alternatively, the missing data
-  entries can be imputed using, e.g., the K-nearest neighbour
+  entries can be imputed using, e.g., the K-nearest neighbors
   imputation, which is implemented in the Bioconductor package
   \code{impute}. ROTS assumes the input data matrix is log2 transformed 
   (the default for log parameter is set to TRUE). Although, this only 
