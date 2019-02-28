@@ -1,9 +1,9 @@
 Package: ROTS
 Type: Package
 Title: Reproducibility-Optimized Test Statistic
-Version: 1.11.1
+Version: 1.11.2
 Author: Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
-Maintainer: Fatemeh Seyednasrollah <fatsey@utu.fi>
+Maintainer: Tomi Suomi <tomi.suomi@utu.fi>
 Description: Calculates the Reproducibility-Optimized Test Statistic
         (ROTS) for differential testing in omics data.
 biocViews: Software, GeneExpression, DifferentialExpression,

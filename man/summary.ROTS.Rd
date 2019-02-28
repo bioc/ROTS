@@ -1,9 +1,11 @@
 \name{summary.ROTS}
 \alias{summary.ROTS}
 \title{ Summary of a ROTS object }
+
 \description{
   Summarizes the differential testing results from ROTS package.
 }
+
 \usage{
   \method{summary}{ROTS}(object, fdr=NULL, num.genes=NULL, verbose=TRUE, ...)
 }
@@ -17,23 +19,22 @@
 }
 
 \details{
-  This function returns the summary information (including row number, test-statistic, pvalue and FDR value)
-  for the selected features.}
+  This function returns the summary information (including row number, test-statistic, pvalue and FDR value) for the selected features.
+  }
 
 \value{
-Returns a matrix where the rows are the selected features and columns are the Row number, ROTS-statistic, pvalue and FDR.
+	Returns a matrix where the rows are the selected features and columns are the Row number, ROTS-statistic, pvalue and FDR.
 }
 
 \references{
-  L. L. Elo, S. Filen, R. Lahesmaa and T. Aittokallio:
-  Reproducibility-optimized test statistic for ranking genes in
-  microarray studies. IEEE/ACM Transactions on Computational Biology and
-  Bioinformatics 5: 423--431, 2008.
+	Suomi T, Seyednasrollah F, Jaakkola MK, Faux T, Elo LL.\cr
+	ROTS: An R package for reproducibility-optimized statistical testing.\cr
+	PLoS Comput Biol 2017; 13: e1005562.
 }
 
-\author{ Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
-  
-  Maintainer: Fatemeh Seyednasrollah <fatsey@utu.fi>
+\author{
+	Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo\cr
+	Maintainer: Tomi Suomi <tomi.suomi@utu.fi>
 }
 
 \seealso{ \code{\link{affySpikeIn}} }

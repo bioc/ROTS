@@ -4,16 +4,17 @@
 \alias{print.ROTS}
 \title{Reproducibility-Optimized Test Statistic (ROTS)}
 
-\description{ Calculates the reproducibility-optimized test statistic
+\description{
+	Calculates the reproducibility-optimized test statistic
 	(ROTS) for ranking genes in order of evidence for differential
 	expression in two-group or multi-group comparisons.
 }
 
 \usage{
-ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE)
+	ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE)
 }
-\arguments{
 
+\arguments{
 	\item{data}{A numeric data matrix or an ExpressionSet instance, in which rows correspond
 		to genes and columns correspond to samples.}
 	\item{groups}{A vector indicating the sample groups.}
@@ -73,6 +74,7 @@ ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a
 	labels. The results for all the genes can be obtained by setting the
 	FDR cutoff to 1.
 }
+
 \value{
   \code{ROTS} returns an object of class \code{ROTS}, which is a list
   containing the following components
@@ -81,12 +83,12 @@ ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a
 	\item{B}{the number of bootstrap and permutation resamplings.}
 	\item{d}{the value of the optimized ROTS-statistic for each gene.}
 	\item{pvalue}{the corresponding pvalues.}
-  \item{FDR}{the corresponding FDR-values.}
-  \item{a1}{the optimized parameter a1.}
-  \item{a2}{the optimized parameter a2.}
-  \item{k}{the optimized top list size.}
-  \item{R}{the optimized reproducibility value.}
-  \item{Z}{the optimized reproducibility Z-score.}
+	\item{FDR}{the corresponding FDR-values.}
+	\item{a1}{the optimized parameter a1.}
+	\item{a2}{the optimized parameter a2.}
+	\item{k}{the optimized top list size.}
+	\item{R}{the optimized reproducibility value.}
+	\item{Z}{the optimized reproducibility Z-score.}
 
 	\code{print} prints the optimized parameters a1 and a2, the optimized
 	top list size and the corresponding reproducibility values.
@@ -99,16 +101,16 @@ ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a
 	is shown for the genes at the specified FDR-level or top list size,
 	respectively.
 }
+
 \references{
-	L. L. Elo, S. Filen, R. Lahesmaa and T. Aittokallio:
-	Reproducibility-optimized test statistic for ranking genes in
-	microarray studies. IEEE/ACM Transactions on Computational Biology and
-	Bioinformatics 5: 423--431, 2008.
+	Suomi T, Seyednasrollah F, Jaakkola MK, Faux T, Elo LL.\cr
+	ROTS: An R package for reproducibility-optimized statistical testing.\cr
+	PLoS Comput Biol 2017; 13: e1005562.
 }
 
-\author{ Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
-
-	Maintainer: Fatemeh Seyednasrollah <fatsey@utu.fi>
+\author{
+	Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo\cr
+	Maintainer: Tomi Suomi <tomi.suomi@utu.fi>
 }
 
 \seealso{ \code{\link{affySpikeIn}} }

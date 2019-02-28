@@ -1,12 +1,15 @@
 \name{plot.ROTS}
 \alias{plot.ROTS}
 \title{ Plotting of a ROTS object }
+
 \description{
   Plots the ROTS objects created with the ROTS package.
 }
+
 \usage{
   \method{plot}{ROTS}(x, fdr=0.05, type=NULL, labels=FALSE, ...)
 }
+
 \arguments{
   \item{x}{A \code{ROTS} object created from differential expression testing run by ROTS.}
   \item{fdr}{Selected cutoff for FDR value.}
@@ -16,14 +19,16 @@
 }
 
 \details{
-  This function plots the results from a ROTS object using given false discovery rate threshold.}
-
-\value{
-Plots the results from ROTS object.
+  This function plots the results from a ROTS object using given false discovery rate threshold.
 }
 
-\author{ Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
-  Maintainer: Fatemeh Seyednasrollah <fatsey@utu.fi>
+\value{
+	Plots the results from ROTS object.
+}
+
+\author{
+	Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo\cr
+	Maintainer: Tomi Suomi <tomi.suomi@utu.fi>
 }
 
 \seealso{ \code{\link{affySpikeIn}} }
