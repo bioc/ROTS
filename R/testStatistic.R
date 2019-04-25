@@ -95,7 +95,6 @@
   
   r <- vector(mode="numeric", length=nrow(samples.all))
   for(k in t) {
-    message(k)
     i <- which(time>=k)
     z <- which(time==k)
     d <- z[which(event[which(time==k)]==1)]
@@ -106,7 +105,6 @@
   
   s <- vector(mode="numeric", length=nrow(samples.all))
   for(k in t) {
-    message(k)
     i <- which(time>=k)
     z <- which(time==k)
     d <- z[which(event[which(time==k)]==1)]
