@@ -31,7 +31,7 @@
 	\item{progress}{A logical indicating if additional progress bars are shown.}
 	\item{verbose}{A logical indicating if messages are shown.}
 	\item{time}{Time to event (for survival data).}
-	\item{event}{Censoring information (for survival data): 1=event, 0=censored)}
+	\item{event}{Censoring information (for survival data): 1=event, 0=censored.}
 	
 }
 
