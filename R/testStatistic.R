@@ -88,3 +88,36 @@
    }
    
 }
+
+`testStatistic.surv` <- function(samples, time, event){
+  samples.all <- do.call("cbind",samples)
+  t <- unique(time[event==1])
+  
+  r <- vector(mode="numeric", length=nrow(samples.all))
+  for(k in t) {
+    message(k)
+    i <- which(time>=k)
+    z <- which(time==k)
+    d <- z[which(event[which(time==k)]==1)]
+    if (length(i)>1) {
+      r <- r + (rowSums(as.data.frame(samples.all[,d]), na.rm=TRUE)-length(d)*rowMeans(samples.all[,i], na.rm=TRUE))
+    }
+  }
+  
+  s <- vector(mode="numeric", length=nrow(samples.all))
+  for(k in t) {
+    message(k)
+    i <- which(time>=k)
+    z <- which(time==k)
+    d <- z[which(event[which(time==k)]==1)]
+    if (length(i)>1) {
+      s <- s + ((length(d)/length(i)) * rowSums((samples.all[,i]-rowMeans(samples.all[,i], na.rm=TRUE))^2))
+    }
+  }
+  s <- s^0.5
+  
+  return(list(d=r, s=s))
+}
+
+
+
