@@ -11,7 +11,7 @@
 }
 
 \usage{
-	ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE)
+	ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE, time = NULL, event = NULL)
 }
 
 \arguments{
@@ -30,6 +30,8 @@
 		This information is only used to calculate log fold change.}
 	\item{progress}{A logical indicating if additional progress bars are shown.}
 	\item{verbose}{A logical indicating if messages are shown.}
+	\item{time}{Time to event (for survival data).}
+	\item{event}{Censoring information (for survival data): 1=event, 0=censored)}
 	
 }
 
