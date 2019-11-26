@@ -1,7 +1,7 @@
 Package: ROTS
 Type: Package
 Title: Reproducibility-Optimized Test Statistic
-Version: 1.15.0
+Version: 1.15.1
 Author: Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
 Maintainer: Tomi Suomi <tomi.suomi@utu.fi>
 Description: Calculates the Reproducibility-Optimized Test Statistic
