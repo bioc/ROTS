@@ -1,10 +1,17 @@
 `ROTS` <-
-  function(data, groups, B=1000, K=NULL, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE, verbose=TRUE) {
+  function(data, groups, B=1000, K=NULL, paired=FALSE, seed=NULL, a1=NULL, a2=NULL, log=TRUE, progress=FALSE, verbose=TRUE, time=NULL, event=NULL) {
     if (is(data, "ExpressionSet"))
            data <- Biobase::exprs(data)  
     ## Set random number generator seed for reproducibility
     if(!is.null(seed))
       set.seed(seed, kind="default")
+    
+    if (!is.null(time)) {
+      groups <- time
+      if(length(time)!=length(event)) {
+        stop(paste("Number of survival times and events do not match."))
+      }
+    }
     
     ## Check groups
     if(length(groups)!=ncol(data)) {
@@ -41,6 +48,9 @@
     
     ## Reorder the data according to the group labels and check for NA rows.
     data <- data[,order(groups)]
+    if (!is.null(time)) {
+      event <- event[order(groups)]
+    }
     groups <- sort(groups)
     
     for (i in unique(groups)) {
@@ -64,7 +74,7 @@
     }
 	
     ## Calculate fold change
-    if (length(unique(cl))==2) {
+    if (length(unique(cl))==2 && is.null(time)) {
       if(log) {
         logfc <- rowMeans(data[,which(cl==1)], na.rm=TRUE) - rowMeans(data[,which(cl==2)], na.rm=TRUE)
       } else {
@@ -98,12 +108,20 @@
       ## If a1 and a2 parameters are given, we don't need the bootstrap
       ## dataset
       if( is.null(a1) | is.null(a2) ){
-        fit <- testStatistic(paired, lapply(samples.R, function(x) data[,x]))
+        if (!is.null(time)) {
+          fit <- testStatistic.surv(lapply(samples.R, function(x) data[,x]), cl, event)
+        } else {
+          fit <- testStatistic(paired, lapply(samples.R, function(x) data[,x]))
+        }
         D[,i] <- fit$d
         S[,i] <- fit$s
       }
       
-      pFit <- testStatistic(paired, lapply(pSamples.R, function(x) data[,x]))
+      if (!is.null(time)) {
+        pFit <- testStatistic.surv(lapply(pSamples.R, function(x) data[,x]), cl, event)
+      } else {
+        pFit <- testStatistic(paired, lapply(pSamples.R, function(x) data[,x]))
+      }
       pD[,i] <- pFit$d
       pS[,i] <- pFit$s
       
@@ -239,7 +257,11 @@
       
       ## Calculate the reproducibility-optimized test statistic based on the
       ## reproducibility-maximizing a1, a2 and k values and the corresponding FDR
-      fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
+      if (!is.null(time)) {
+        fit <- testStatistic.surv(lapply(split(1:length(cl), cl), function(x) data[,x]), cl, event)
+      } else {
+        fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
+      }
       d <- fit$d / (a1 + a2 * fit$s)
       pD <- pD/(a1 + a2 * pS)
       
@@ -276,7 +298,11 @@
     else{ # !is.null(a1 & !is.null(a2)
       ## Calculate statistic based on the given parameter values
       ## and the corresponding FDR
-      fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
+      if (!is.null(time)) {
+        fit <- testStatistic.surv(lapply(split(1:length(cl), cl), function(x) data[,x]), cl, event)
+      } else {
+        fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
+      }
       d <- fit$d / (a1 + a2 * fit$s)
       if (verbose) message("Calculating p-values")
       p <- calculateP(d, pD/(a1 + a2 * pS))
