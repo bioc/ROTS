@@ -37,6 +37,15 @@
     K <- min(K,nrow(data))
     N <- N[N < K]
     
+    # handle the situation if the groups is character
+    if(inherits(groups, "character")){
+        groups <- factor(groups)
+        groups.levels <- levels(groups)
+        groups <- as.numeric(groups)
+    }else{
+        groups.levels <- NULL
+    }
+    
     ## Reorder the data according to the group labels and check for NA rows.
     data <- data[,order(groups)]
     if (!is.null(time)) {
@@ -44,11 +53,14 @@
     }
     groups <- sort(groups)
     
-    if (is.null(time)) {
-      for (i in unique(groups)) {
-        if(any(rowSums(is.na(data[,which(groups==i)])) >= length(which(groups==i))-1)) {
-          stop(paste("The data matrix of group",i,"contains rows with less than two non-missing values, please remove these rows."))
+    for (i in unique(groups)) {
+      if(any(rowSums(is.na(data[,which(groups==i)])) >= length(which(groups==i))-1)) {
+        if(is.null(groups.levels)){
+            target <- i
+        }else{
+            target <- groups.levels[i]
         }
+        stop(paste("The data matrix of group",target,"contains rows with less than two non-missing values, please remove these rows."))
       }
     }
     
