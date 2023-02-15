@@ -109,7 +109,7 @@
     z <- which(time==k)
     d <- z[which(event[which(time==k)]==1)]
     if (length(i)>1) {
-      s <- s + ((length(d)/length(i)) * rowSums((samples.all[,i]-rowMeans(samples.all[,i], na.rm=TRUE))^2))
+      s <- s + ((length(d)/length(i)) * rowSums((samples.all[,i]-rowMeans(samples.all[,i], na.rm=TRUE))^2, na.rm=TRUE))
     }
   }
   s <- s^0.5
