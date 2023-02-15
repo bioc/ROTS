@@ -53,17 +53,18 @@
     }
     groups <- sort(groups)
     
-    for (i in unique(groups)) {
-      if(any(rowSums(is.na(data[,which(groups==i)])) >= length(which(groups==i))-1)) {
-        if(is.null(groups.levels)){
+    if (is.null(time)) {
+      for (i in unique(groups)) {
+        if(any(rowSums(is.na(data[,which(groups==i)])) >= length(which(groups==i))-1)) {
+          if(is.null(groups.levels)){
             target <- i
-        }else{
+          } else {
             target <- groups.levels[i]
+          }
+          stop(paste("The data matrix of group",target,"contains rows with less than two non-missing values, please remove these rows."))
         }
-        stop(paste("The data matrix of group",target,"contains rows with less than two non-missing values, please remove these rows."))
       }
     }
-    
     cl <- groups+(1-min(groups))
 	
     ## Check number of samples for paired test
