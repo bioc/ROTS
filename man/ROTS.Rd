@@ -11,7 +11,9 @@
 }
 
 \usage{
-	ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL, a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE, time = NULL, event = NULL)
+	ROTS(data, groups, B = 1000, K = NULL, paired = FALSE, seed = NULL,
+	a1 = NULL, a2 = NULL, log = TRUE, progress = FALSE, verbose = TRUE,
+	time = NULL, event = NULL)
 }
 
 \arguments{
@@ -37,7 +39,7 @@
 
 \details{ The reproducibility-optimization procedure ROTS enables the
 	selection of a suitable gene ranking statistic directly from the given
-	dataset. The statistic is optimized among a family of t-type
+	dataset. In two-group comparisons, the statistic is optimized among a family of t-type
 	statistics d = m/(a1+a2*s), where m is the absolute difference between
 	the group averages, s is the pooled standard error, and a1 and a2 are
 	the non-negative parameters to be optimized. Two special cases of this

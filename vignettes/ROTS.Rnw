@@ -20,8 +20,7 @@ ROTS: Reproducibility Optimized Test Statistic
 \end{center}
 }
 
-\author{Fatemeh Seyednasrollah$^{*}$, Tomi Suomi, Laura L. Elo 
-\\[1em] {\texttt{$^*$fatsey (at) utu.fi}}}
+\author{Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo}
 
 \date{March 3, 2016}
 
@@ -40,34 +39,46 @@ ROTS: Reproducibility Optimized Test Statistic
 
 \section{Introduction}
 
-Differential expression testing is perhaps the most common approach among current omics analysies. Reproducibility optimized test statistic (ROTS) aims to rank genomic features of interest (such as genes, proteins and transcripts) in order of evidence for differential expression in two-group comparisons. Initially, ROTS was developed to test differential expression in microarray studies (Elo 2008). However, the general design of the algorithm supports the utility of the method in proteomics and count-based technologies like RNA-seq and single cell datasets (Seyednasrollah et al. 2015, Pursiheimo et al. 2015). ROTS is a data adaptive method which can optimize its parameters based on intrinsic features of input data. Also, the method aims to solve the common problem of small sample size through a resampling procedure. \\[1em]
+Differential expression testing is perhaps the most common approach among current omics analysies. Reproducibility optimized test statistic (ROTS) aims to rank genomic features of interest (such as genes, proteins and transcripts) in order of evidence for differential expression in two-group comparisons. Initially, ROTS was developed to test differential expression in microarray studies (Elo 2008). However, the general design of the algorithm supports the utility of the method in proteomics and count-based technologies like RNA-seq and single cell datasets (Seyednasrollah et al. 2015, Pursiheimo et al. 2015). ROTS is a data adaptive method which can optimize its parameters based on intrinsic features of input data. Also, the method aims to solve the common problem of small sample size through a resampling procedure.\\[1em]
 
 The ROTS statistic is optimized among a family of \textit{t-type} statistics
 $d = m/(\alpha_1 + \alpha_2 \times s)$, where $m$ is the absolute difference between the group averages $\left|\bar{x_1} - \bar{x_2}\right|$, $s$ is the pooled standard error, and $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized. Two special cases of this family are the ordinary \textit{t-statistic} $(\alpha_1 = 0, \alpha_2 = 1)$ and the signal log-ratio $(\alpha_1 = 1, \alpha_2 = 0)$.\\[1em]
 
 The optimality is defined in terms of maximal overlap of top-ranked features in group-preserving bootstrap datasets. Importantly, besides the group labels, no a priori information about the properties of the data is required and no fixed cutoff for the gene rankings needs to be specified. The user is given the option to adjust the largest top list size ($K$) considered in the reproducibility calculations, since lowering this size can markedly reduce the computation time. In large data matrices with thousands of rows, we generally recommend using a size of several thousands.\\[1em]
 
-ROTS tolerates a moderate number of missing values in the data matrix by effectively ignoring their contribution during the operation of the procedure. However, each row of the data matrix must contain at least two values in both groups. The rows containing only a few non-missing values should be removed; or alternatively, the missing data entries can be imputed using, e.g., the K-nearest neighbour imputation, which is implemented in the Bioconductor package impute. If the parameter values $\alpha_1$ and $\alpha_2$ are set by the user, then no optimization is performed but the statistic and FDR-values are calculated for the given parameters. The false discovery rate (FDR) for the optimized test statistic is calculated by permuting the sample labels. The results for all the genes can be obtained by setting the FDR cutoff to 1.
+ROTS tolerates a moderate number of missing values in the data matrix by effectively ignoring their contribution during the operation of the procedure. However, each row of the data matrix must contain at least two values in both groups. The rows containing only a few non-missing values should be removed; or alternatively, the missing data entries can be imputed using, e.g., the K-nearest neighbour imputation, which is implemented in the Bioconductor package impute. If the parameter values $\alpha_1$ and $\alpha_2$ are set by the user, then no optimization is performed but the statistic and FDR-values are calculated for the given parameters. The false discovery rate (FDR) for the optimized test statistic is calculated by permuting the sample labels. The results for all the genes can be obtained by setting the FDR cutoff to 1.\\[1em]
 
 \section{Algorithm overview}
 
-ROTS optimizes the reproducibility among a family of modified \textit{t}-statistics:
+In two-group comparisons, ROTS optimizes the reproducibility among a family of modified t-statistics:
 \begin{equation}
-  d_\alpha = \frac{\left|\bar{x_1} - \bar{x_2}\right|}{ \alpha_1 + \alpha_2 \times s}
+d_\alpha = \frac{\left|\bar{x_1} - \bar{x_2}\right|}{ \alpha_1 + \alpha_2 \times s}
 \end{equation}
 
-where $\left|\bar{x_1} - \bar{x_2}\right|$ is the absolute difference between the group averages, $s$ is the pooled standard error, $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized.
-The optimal statistic is determined by maximizing the reproducibility Z-score:
+where $\left|\bar{x_1} - \bar{x_2}\right|$ is the absolute difference between the group averages, $s$ is the pooled standard error, $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized.\\[1em]
+
+In multi-group comparisons, ROTS optimizes the reproducibility of top-ranked features in group-preserving bootstrap datasets among a family of modified f-statistics:
+\begin{equation}
+d_\alpha = \frac{r_\alpha}{ \alpha_1 + \alpha_2 s}
+\end{equation}
+
+where $r_\alpha$ is a score, $\alpha_1$ and $\alpha_2$ are non-negative parameters to be optimized, and $s$ is standard deviation. The score and the standard deviation are calculated as:
+\begin{equation}
+r = \left[ \left\{ \sum n_k / \prod n_k \right\} \sum_{k=1}^{K}n_k \left( \bar{x}_{ik} - \bar{x}_i \right)^2 \right] ^{1/2}
+\end{equation}
 
 \begin{equation}
-	Z_k\left(d_\alpha\right) = \frac{R_k\left(d_\alpha\right) - R_k^0\left(d_\alpha\right)}{s_k\left(d_\alpha\right)}
+s = \left[ \frac{1}{\sum \left ( n_k - 1 \right )} \left ( \sum \frac{1}{n_k} \right ) \sum_{k=1}^{K} \sum_{j \in C_k}^{ } \left( x_{ij} - \bar{x}_{ik} \right)^2 \right] ^ {1/2}
+\end{equation}
+
+The optimal statistic is determined by maximizing the reproducibility Z-score:
+\begin{equation}
+Z_k\left(d_\alpha\right) = \frac{R_k\left(d_\alpha\right) - R_k^0\left(d_\alpha\right)}{s_k\left(d_\alpha\right)}
 \end{equation}
 
 over a dence lattice $\alpha_1 \in [0, 0.01, . . . , 5]$ , $\alpha_2 \in \left\{0, 1\right\}$, $k \in \left\{1, 2, . . . , G\right\}$.\\[1em]
 
-Here, $R_k\left(d_\alpha\right)$ is the observed reproducibility at top list size $k$, $R_k^0\left(d_\alpha\right)$ is the corresponding reproducibility in randomized datasets (permuted over samples), $s_k\left(d_\alpha\right)$ is the standard deviation of the bootstrap distribution, and $G$ is the total number of genes/proteins in the data. \\[1em]
-
-Reproducibility is defined as the average overlap of $k$ top-ranked genemoc features over pairs of bootstrapped datasets. \\[1em]
+Here, $R_k\left(d_\alpha\right)$ is the observed reproducibility at top list size $k$, $R_k^0\left(d_\alpha\right)$ is the corresponding reproducibility in randomized datasets (permuted over samples), $s_k\left(d_\alpha\right)$ is the standard deviation of the bootstrap distribution, and $G$ is the total number of genes/proteins in the data. Reproducibility is defined as the average overlap of $k$ top-ranked features over pairs of bootstrapped datasets. \\[1em]
 
 For more detailed information about the ROTS algorithm, see Elo et al. (2008) and Seyednasrollah et al. (2015).
 
