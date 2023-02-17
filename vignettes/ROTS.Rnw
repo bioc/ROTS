@@ -42,7 +42,7 @@ ROTS: Reproducibility Optimized Test Statistic
 Differential expression testing is perhaps the most common approach among current omics analysies. Reproducibility optimized test statistic (ROTS) aims to rank genomic features of interest (such as genes, proteins and transcripts) in order of evidence for differential expression in two-group comparisons. Initially, ROTS was developed to test differential expression in microarray studies (Elo 2008). However, the general design of the algorithm supports the utility of the method in proteomics and count-based technologies like RNA-seq and single cell datasets (Seyednasrollah et al. 2015, Pursiheimo et al. 2015). ROTS is a data adaptive method which can optimize its parameters based on intrinsic features of input data. Also, the method aims to solve the common problem of small sample size through a resampling procedure.\\[1em]
 
 The ROTS statistic is optimized among a family of \textit{t-type} statistics
-$d = m/(\alpha_1 + \alpha_2 \times s)$, where $m$ is the absolute difference between the group averages $\left|\bar{x_1} - \bar{x_2}\right|$, $s$ is the pooled standard error, and $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized. Two special cases of this family are the ordinary \textit{t-statistic} $(\alpha_1 = 0, \alpha_2 = 1)$ and the signal log-ratio $(\alpha_1 = 1, \alpha_2 = 0)$.\\[1em]
+$d = r/(\alpha_1 + \alpha_2 \times s)$, where $r$ is the absolute difference between the group averages $\left|\bar{x_1} - \bar{x_2}\right|$, $s$ is the pooled standard error, and $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized. Two special cases of this family are the ordinary \textit{t-statistic} $(\alpha_1 = 0, \alpha_2 = 1)$ and the signal log-ratio $(\alpha_1 = 1, \alpha_2 = 0)$.\\[1em]
 
 The optimality is defined in terms of maximal overlap of top-ranked features in group-preserving bootstrap datasets. Importantly, besides the group labels, no a priori information about the properties of the data is required and no fixed cutoff for the gene rankings needs to be specified. The user is given the option to adjust the largest top list size ($K$) considered in the reproducibility calculations, since lowering this size can markedly reduce the computation time. In large data matrices with thousands of rows, we generally recommend using a size of several thousands.\\[1em]
 
@@ -50,35 +50,46 @@ ROTS tolerates a moderate number of missing values in the data matrix by effecti
 
 \section{Algorithm overview}
 
-In two-group comparisons, ROTS optimizes the reproducibility among a family of modified t-statistics:
+ROTS optimizes the reproducibility among a family of modified statistics:
 \begin{equation}
-d_\alpha = \frac{\left|\bar{x_1} - \bar{x_2}\right|}{ \alpha_1 + \alpha_2 \times s}
+d_\alpha = \frac{r}{ \alpha_1 + \alpha_2 \times s}
 \end{equation}
 
-where $\left|\bar{x_1} - \bar{x_2}\right|$ is the absolute difference between the group averages, $s$ is the pooled standard error, $\alpha_1$ and $\alpha_2$ are the non-negative parameters to be optimized.\\[1em]
-
-In multi-group comparisons, ROTS optimizes the reproducibility of top-ranked features in group-preserving bootstrap datasets among a family of modified f-statistics:
-\begin{equation}
-d_\alpha = \frac{r_\alpha}{ \alpha_1 + \alpha_2 s}
-\end{equation}
-
-where $r_\alpha$ is a score, $\alpha_1$ and $\alpha_2$ are non-negative parameters to be optimized, and $s$ is standard deviation. The score and the standard deviation are calculated as:
-\begin{equation}
-r = \left[ \left\{ \sum n_k / \prod n_k \right\} \sum_{k=1}^{K}n_k \left( \bar{x}_{ik} - \bar{x}_i \right)^2 \right] ^{1/2}
-\end{equation}
-
-\begin{equation}
-s = \left[ \frac{1}{\sum \left ( n_k - 1 \right )} \left ( \sum \frac{1}{n_k} \right ) \sum_{k=1}^{K} \sum_{j \in C_k}^{ } \left( x_{ij} - \bar{x}_{ik} \right)^2 \right] ^ {1/2}
-\end{equation}
+where $r$ is a score, $\alpha_1$ and $\alpha_2$ are non-negative parameters to be optimized, and $s$ is standard deviation.\\[1em]
 
 The optimal statistic is determined by maximizing the reproducibility Z-score:
 \begin{equation}
 Z_k\left(d_\alpha\right) = \frac{R_k\left(d_\alpha\right) - R_k^0\left(d_\alpha\right)}{s_k\left(d_\alpha\right)}
 \end{equation}
 
-over a dence lattice $\alpha_1 \in [0, 0.01, . . . , 5]$ , $\alpha_2 \in \left\{0, 1\right\}$, $k \in \left\{1, 2, . . . , G\right\}$.\\[1em]
+over a dence lattice $\alpha_1 \in [0, 0.01, . . . , 5]$ , $\alpha_2 \in \left\{0, 1\right\}$, $k \in \left\{1, 2, . . . , G\right\}$. Here, $R_k\left(d_\alpha\right)$ is the observed reproducibility at top list size $k$, $R_k^0\left(d_\alpha\right)$ is the corresponding reproducibility in randomized datasets (permuted over samples), $s_k\left(d_\alpha\right)$ is the standard deviation of the bootstrap distribution, and $G$ is the total number of genes/proteins in the data. Reproducibility is defined as the average overlap of $k$ top-ranked features over pairs of bootstrapped datasets. \\[1em]
 
-Here, $R_k\left(d_\alpha\right)$ is the observed reproducibility at top list size $k$, $R_k^0\left(d_\alpha\right)$ is the corresponding reproducibility in randomized datasets (permuted over samples), $s_k\left(d_\alpha\right)$ is the standard deviation of the bootstrap distribution, and $G$ is the total number of genes/proteins in the data. Reproducibility is defined as the average overlap of $k$ top-ranked features over pairs of bootstrapped datasets. \\[1em]
+In two-group comparisons, ROTS optimizes the reproducibility of top-ranked features in group-preserving bootstrap datasets among a family of modified t-statistics, where the score $r$ is the absolute difference between the group averages and $s$ is the pooled standard error:
+\begin{equation}
+r = \left|\bar{x_1} - \bar{x_2}\right|
+\end{equation}
+\begin{equation}
+s = \left[ \frac{ \sum_{i \in C_1}^{} (x_{i}-\bar{x}_{1})^2 + \sum_{i \in C_2}^{} (x_{i}-\bar{x}_{2})^2}{n_1 + n_2 - 2} (1/n_1 + 1/n_2)\right]^{1/2}
+\end{equation}
+where $i$ has the indices of observations in classes $C_1$ and $C_2$, and $n_1$ and $n_2$ are the number samples in classes 1 and 2, respectively.\\[1em]
+
+In multi-group comparisons, ROTS optimizes the reproducibility of top-ranked features in group-preserving bootstrap datasets among a family of modified f-statistics:
+\begin{equation}
+r = \left[ \left\{ \sum n_c / \prod n_c \right\} \sum_{c=1}^{C}n_c \left( \bar{x}_{c} - \bar{x} \right)^2 \right] ^{1/2}
+\end{equation}
+\begin{equation}
+s = \left[ \frac{1}{\sum \left ( n_c - 1 \right )} \left ( \sum \frac{1}{n_c} \right ) \sum_{c=1}^{C} \sum_{i \in C_c}^{ } \left( x_{i} - \bar{x}_{c} \right)^2 \right] ^ {1/2}
+\end{equation}
+where $c$ is the different classes $\{ 1,2,...,C \}$, $n_c$ is the number samples in class $c$, and $i$ has the indices of observations in class $C_c$.\\[1em]
+
+In survival analysis, ROTS optimizes the reproducibility of top-ranked features among Cox scores:
+\begin{equation}
+r = \sum_{t=1_1}^{T}\left[ x_{D_t}-d_t\bar{x}_t \right]
+\end{equation}
+\begin{equation}
+s = \left[ \sum_{t=t_1}^{T} (d_t/k_t) \sum_{i \in R_t}^{} (x_{i}-\bar{x}_{t})^2 \right]^{1/2}
+\end{equation}
+where $D_t$ is indices of observations at the different death times $\{ t_1,t_2,...,T \}$, $R_t$ indices of the observations at risk at these times, and $d_t$ and $k_t$ the number of deaths and individuals at risk, at the time, respectively.\\[1em]
 
 For more detailed information about the ROTS algorithm, see Elo et al. (2008) and Seyednasrollah et al. (2015).
 
