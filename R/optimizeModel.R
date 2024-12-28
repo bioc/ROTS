@@ -1,5 +1,5 @@
 # Function to run the optimization
-optimizeModel <- function(model.original, model.boot, model.null, B, K, seed, BPPARAM) {
+`optimizeModel` <- function(data, model.original, model.boot, model.null, B, K, seed, BPPARAM) {
   
   # Parameters to test
   a.test <- c(-1, (0:20) / 100, (11:50) / 50, (6:25) / 5)

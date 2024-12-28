@@ -61,7 +61,7 @@
 
 \examples{
 ## lmROTS-statistic
-rots.out <- lmeROTS("Group + Age", data, metadata)
+\dontrun{rots.out <- lmeROTS("Group + Age", data, metadata)}
 }
 
 \keyword{math}
