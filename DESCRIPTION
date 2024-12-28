@@ -11,7 +11,7 @@ biocViews: Software, GeneExpression, DifferentialExpression,
 License: GPL (>= 2)
 LazyData: yes
 LinkingTo: Rcpp
-Imports: Rcpp, stats, Biobase, methods
+Imports: Rcpp, stats, Biobase, methods, BiocParallel, lme4
 Suggests: testthat
 Depends: R (>= 3.3)
 NeedsCompilation: yes
