@@ -28,13 +28,19 @@
   # Run over bootstraps
   message("Running bootstraps")
   lme.boot <- bplapply(1:B, function(x) {
-    t(sapply(1:nrow(data), function(i) runlme(i, formula, data[,boot[,x]], metadata[boot[,x],])))
+    out <- t(sapply(1:nrow(data), function(i) runlme(i, formula, data[,boot[,x]], metadata[boot[,x],])))
+    out <- out[,match(colnames(lme.original),colnames(out))]
+    colnames(out) <- colnames(lme.original)
+    return(out)
   }, BPPARAM=BPPARAM)
   
   # Run over permutations
   message("Running permutations")
   lme.null <- bplapply(1:B, function(x) {
-    t(sapply(1:nrow(data), function(i) runlme(i, formula, data, metadata[perm[,x],])))
+    out <- t(sapply(1:nrow(data), function(i) runlme(i, formula, data, metadata[perm[,x],])))
+    out <- out[,match(colnames(lme.original),colnames(out))]
+    colnames(out) <- colnames(lme.original)
+    return(out)
   }, BPPARAM=BPPARAM)
   
   # Optimize parameters
