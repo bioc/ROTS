@@ -1,3 +1,6 @@
+CHANGES IN ROTS 2.0.0
+- Added support for linear and mixed-effects models
+
 CHANGES IN ROTS 1.27.1
 - Added support for survival analysis
 
