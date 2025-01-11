@@ -3,9 +3,11 @@
   tryCatch({
     fit <- suppressMessages(suppressWarnings(lme4::lmer(as.formula(paste("datavalue ~",formula)), data=cbind(metadata,datavalue=c(t(data[i,]))))))
     coef <- coefficients(summary(fit))
-    return(c(coef[-1,1],coef[-1,2]))
+    co <- coef[-1,1]; names(co) <- paste("coef",names(co),sep=".")
+    sd <- coef[-1,2]; names(sd) <- paste("sd",names(sd),sep=".")
+    return(c(co,sd))
   }, error = function(e) {
-    return(NULL)
+    return(NA)
   })
 }
 
@@ -23,12 +25,21 @@
   
   # Original
   message("Running initial model")
-  lme.original <- do.call("rbind", bplapply(1:nrow(data), function(i) runlme(i, formula, data, metadata), BPPARAM=BPPARAM))
-  
+  lme.original <- bplapply(1:nrow(data), function(i) runlme(i, formula, data, metadata), BPPARAM=BPPARAM)
+  names <- names(lme.original[[which.max(sapply(lme.original, length))]])
+  for (i in 1:length(lme.original)) {
+    lme.original[[i]] <- lme.original[[i]][names]
+  }
+  lme.original <- do.call("rbind", lme.original)
+  colnames(lme.original) <- names
+  rownames(lme.original) <- rownames(data)
+
   # Run over bootstraps
   message("Running bootstraps")
   lme.boot <- bplapply(1:B, function(x) {
-    out <- t(sapply(1:nrow(data), function(i) runlme(i, formula, data[,boot[,x]], metadata[boot[,x],])))
+    out <- lapply(1:nrow(data), function(i) runlme(i, formula, data[,boot[,x]], metadata[boot[,x],]))
+    out[is.na(out)] <- list(rep(NA,ncol(lme.original)))
+    out <- do.call("rbind",out)
     out <- out[,match(colnames(lme.original),colnames(out))]
     colnames(out) <- colnames(lme.original)
     return(out)
@@ -37,7 +48,9 @@
   # Run over permutations
   message("Running permutations")
   lme.null <- bplapply(1:B, function(x) {
-    out <- t(sapply(1:nrow(data), function(i) runlme(i, formula, data, metadata[perm[,x],])))
+    out <- lapply(1:nrow(data), function(i) runlme(i, formula, data, metadata[perm[,x],]))
+    out[is.na(out)] <- list(rep(NA,ncol(lme.original)))
+    out <- do.call("rbind",out)
     out <- out[,match(colnames(lme.original),colnames(out))]
     colnames(out) <- colnames(lme.original)
     return(out)

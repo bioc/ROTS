@@ -13,7 +13,7 @@
   k.test <- k.test[k.test < K]
   
   n <- (ncol(model.original)/2)
-  names <- colnames(model.original)[1:n]
+  names <- gsub("coef\\.","",colnames(model.original)[1:n])
   
   results <- lapply(1:n, function(v) {
     message(paste("Optimizing parameters:",names[v]))
