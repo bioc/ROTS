@@ -59,7 +59,7 @@
     R <- r.boot
     Z <- (r.boot-r.null)/sd.boot
     pvalue <- unlist(bplapply(d, function(x) {
-      1-(sum(abs(d.null)<abs(x))/(length(d.null)+1))
+      1-(sum(abs(d.null)<abs(x),na.rm=TRUE)/(length(d.null)+1))
     }, BPPARAM=BPPARAM))
     FDR <- p.adjust(pvalue, method="BH")
     
