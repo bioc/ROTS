@@ -1,6 +1,6 @@
 \name{summary.ROTS}
 \alias{summary.ROTS}
-\title{ Summary of a ROTS object }
+\title{Summary of a ROTS object}
 
 \description{
   Summarizes the differential testing results from ROTS package.
