@@ -7,6 +7,7 @@ S3method(summary, ROTS)
 S3method(plot, ROTS)
 S3method(summary, regROTS)
 S3method(plot, regROTS)
+export(results)
 
 ## Load  shared library ROTS.so/dll
 useDynLib(ROTS)

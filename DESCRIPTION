@@ -1,7 +1,7 @@
 Package: ROTS
 Type: Package
 Title: Reproducibility-Optimized Test Statistic
-Version: 1.99.6
+Version: 1.99.7
 Author: Fatemeh Seyednasrollah, Tomi Suomi, Laura L. Elo
 Maintainer: Tomi Suomi <tomi.suomi@utu.fi>
 Description: Calculates the Reproducibility-Optimized Test Statistic
@@ -13,5 +13,5 @@ LazyData: yes
 LinkingTo: Rcpp
 Imports: Rcpp, stats, Biobase, methods, BiocParallel, lme4
 Suggests: testthat
-Depends: R (>= 3.3)
+Depends: R (>= 3.6)
 NeedsCompilation: yes
