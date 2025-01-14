@@ -7,7 +7,7 @@
 }
 
 \usage{
-  results(object, order=FALSE, pvalue=NULL, FDR=NULL, coef=NULL)
+  results(object, order=FALSE, pvalue=NULL, FDR=NULL, coef=NULL, logfc=NULL)
 }
 
 \arguments{
@@ -15,7 +15,8 @@
   \item{order}{Ordering of results based on significance (default FALSE).}
   \item{pvalue}{Optional p-value cutoff for filtering the results.}
   \item{FDR}{Optional false discovery rate cutoff for filtering the results.}
-  \item{coef}{Optional model coefficient cutoff for filtering the results.}
+  \item{coef}{Optional model coefficient cutoff for filtering the results (\code{regROTS}).}
+  \item{logfc}{Optional log fold change cutoff for filtering the results (\code{ROTS}).}
 }
 
 \details{
