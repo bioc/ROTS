@@ -3,8 +3,8 @@
   tryCatch({
     fit <- suppressMessages(suppressWarnings(lm(as.formula(paste("datavalue ~",formula)), data=cbind(metadata,datavalue=c(t(data[i,]))))))
     coef <- coefficients(summary(fit))
-    co <- coef[-1,1]; names(co) <- paste("coef",names(co),sep=".")
-    sd <- coef[-1,2]; names(sd) <- paste("sd",names(sd),sep=".")
+    co <- coef[-1,1]; names(co) <- paste("coef",rownames(coef)[-1],sep=".")
+    sd <- coef[-1,2]; names(sd) <- paste("sd",rownames(coef)[-1],sep=".")
     return(c(co,sd))
   }, error = function(e) {
     return(NA)
