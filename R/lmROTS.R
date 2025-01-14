@@ -37,7 +37,7 @@
   # Run over bootstraps
   message("Running bootstraps")
   lm.boot <- bplapply(1:B, function(x) {
-    out <- lapply(1:nrow(data), function(i) runlm(i, formula, data[,boot[,x]], metadata[boot[,x],]))
+    out <- lapply(1:nrow(data), function(i) runlm(i, formula, data[,boot[,x]], metadata[boot[,x],,drop=FALSE]))
     out[is.na(out)] <- list(rep(NA,ncol(lm.original)))
     out <- do.call("rbind",out)
     out <- out[,match(colnames(lm.original),colnames(out))]
@@ -48,7 +48,7 @@
   # Run over permutations
   message("Running permutations")
   lm.null <- bplapply(1:B, function(x) {
-    out <- lapply(1:nrow(data), function(i) runlm(i, formula, data, metadata[perm[,x],]))
+    out <- lapply(1:nrow(data), function(i) runlm(i, formula, data, metadata[perm[,x],,drop=FALSE]))
     out[is.na(out)] <- list(rep(NA,ncol(lm.original)))
     out <- do.call("rbind",out)
     out <- out[,match(colnames(lm.original),colnames(out))]
