@@ -9,6 +9,9 @@
     K <- floor(nrow(data)/4)
     message(paste("No max top list size K given, using",K))
   }
+  if (K>nrow(data)*0.9) {
+    warning("Top list size K is more than 90% of the data. Be cautious with reproducibility estimates.")
+  }
   K <- min(K,nrow(data))
   k.test <- k.test[k.test < K]
   

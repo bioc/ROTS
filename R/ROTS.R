@@ -32,6 +32,9 @@
       K <- floor(nrow(data)/4)
       if (verbose) message(paste("No top list size K given, using",K))
     }
+    if (K>nrow(data)*0.9) {
+    	warning("Top list size K is more than 90% of the data. Be cautious with reproducibility estimates.")
+    }
     
     ## The top list size cannot be larger than the total number of genes
     K <- min(K,nrow(data))
