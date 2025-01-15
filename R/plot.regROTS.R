@@ -44,8 +44,8 @@ plot.regROTS <- function(x, fdr=0.05, type=NULL, features=NULL, labels=FALSE, ..
       z <- x[[s]]$ztable[sel[1],]
       plot(k, z, pch=20, xlab="Top list size", ylab="Reproducibility Z-score", cex=0.5, panel.first=lines(k, z, col="grey"), bty="l")
       mtext(names(x)[s])
-      points(k[which(z==max(z))], z[which(z==max(z))], pch=21, col="red")
-      text(k[which(z==max(z))], z[which(z==max(z))], labels=round(max(z),digits=3), pos=4)
+      points(k[which(z==max(z, na.rm=TRUE))], z[which(z==max(z, na.rm=TRUE))], pch=21, col="red")
+      text(k[which(z==max(z, na.rm=TRUE))], z[which(z==max(z, na.rm=TRUE))], labels=round(max(z, na.rm=TRUE),digits=3), pos=4)
       legend("topright",c(paste("a1 =",x[[s]]$a1),paste("a2 =",x[[s]]$a2)), bty="n")
     }
   }
