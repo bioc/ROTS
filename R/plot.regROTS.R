@@ -10,7 +10,7 @@ plot.regROTS <- function(x, fdr=0.05, type=NULL, features=NULL, labels=FALSE, ..
   }
   
   # Differentially expressed features
-  de <- lapply(x, function(y) which(y$FDR<0.05))
+  de <- lapply(x, function(y) which(y$FDR<fdr))
   
   # Which indices to plot
   sel.plot <- seq_along(x) 
