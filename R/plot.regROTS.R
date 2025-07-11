@@ -5,6 +5,9 @@ plot.regROTS <- function(x, fdr=0.05, type=NULL, features=NULL, labels=FALSE, ..
     if(!(type %in% c("volcano","reproducibility","pvalue"))) {
       stop("Plot type not available. The options are: 'volcano', 'reproducibility', 'pvalue'")
     }
+    if(type=="reproducibility" & is.null(x[[1]]$ztable)) {
+      stop("Parameters were not optimized")
+    }
   } else {
     stop("Plot type not selected. The options are: 'volcano', 'reproducibility', 'pvalue'")
   }
