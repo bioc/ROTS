@@ -12,7 +12,7 @@
 }
 
 # lmROTS
-`lmROTS` <- function(formula, data, metadata, B=100, K=NULL, seed=NULL, BPPARAM=bpparam()) {
+`lmROTS` <- function(formula, data, metadata, B=100, K=NULL, seed=NULL, a1=NULL, a2=NULL, BPPARAM=bpparam()) {
   if (is(data, "ExpressionSet"))
     data <- Biobase::exprs(data)
   	
@@ -57,7 +57,7 @@
   }, BPPARAM=BPPARAM)
   
   # Optimize parameters
-  ROTS.output <- optimizeModel(data=data, model.original=lm.original, model.boot=lm.boot, model.null=lm.null, B=B, K=K, seed=seed, BPPARAM=BPPARAM)
+  ROTS.output <- optimizeModel(data=data, model.original=lm.original, model.boot=lm.boot, model.null=lm.null, B=B, K=K, seed=seed, a1=a1, a2=a2, BPPARAM=BPPARAM)
   class(ROTS.output) <- "regROTS"
   return(ROTS.output)
 }
