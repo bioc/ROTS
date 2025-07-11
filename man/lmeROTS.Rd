@@ -10,7 +10,7 @@
 
 \usage{
 	lmeROTS(formula, data, metadata, B = 100, K = NULL, seed = NULL,
-	BPPARAM = bpparam())
+	a1 = NULL, a2 = NULL, BPPARAM = bpparam())
 }
 
 \arguments{
@@ -27,6 +27,7 @@
 	\item{K}{An integer indicating the largest top list size considered.
 	  If no value is given, 1/4 of the features are used.}
 	\item{seed}{An integer seed for the random number generator.}
+	\item{a1, a2}{Non-negative parameters.}
 	\item{BPPARAM}{BiocParallel back-end if other than default.}
 	
 }
