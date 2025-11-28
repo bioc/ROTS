@@ -10,7 +10,7 @@ NumericVector pvalue(SEXP a, SEXP b) {
   
   int j = 0;
   for (int i=0; i<observed.length(); i++) {
-    while(permuted[j]>=observed[i] && j<permuted.length()) {
+    while(j<permuted.length() && permuted[j]>=observed[i]) {
       j++;
     }
     pvalues[i] = double(j) / double(permuted.length());
