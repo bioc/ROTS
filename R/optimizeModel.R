@@ -65,10 +65,8 @@
       sd.boot <- sd(apply(d.boot, 2, function(x) sum(rank(-abs(d))<=k & rank(-abs(x))<=k)/k))
       R <- r.boot
       Z <- (r.boot-r.null)/sd.boot
-      pvalue <- unlist(bplapply(d, function(x) {
-        1-(sum(abs(d.null)<abs(x),na.rm=TRUE)/(length(d.null)+1))
-      }, BPPARAM=BPPARAM))
-      FDR <- p.adjust(pvalue, method="BH")
+      pvalue <- calculateP(d, d.null)
+      FDR <- calculateFDR(d, d.null, progress=FALSE)
       
       names(d) <- names(coef) <- names(pvalue) <- names(FDR) <- rownames(data)
       out <- list(d=d, coef=coef, pvalue=pvalue, FDR=FDR, a1=a1, a2=a2, k=k, R=R, Z=Z, ztable=ztable)
@@ -81,10 +79,8 @@
       d <- model.original[,v] / (a1+a2*model.original[,v+n])
       d.null <- sapply(model.null, function(x) x[,v]/(a1+a2*x[,v+n]))
       
-      pvalue <- unlist(bplapply(d, function(x) {
-        1-(sum(abs(d.null)<abs(x),na.rm=TRUE)/(length(d.null)+1))
-      }, BPPARAM=BPPARAM))
-      FDR <- p.adjust(pvalue, method="BH")
+      pvalue <- calculateP(d, d.null)
+      FDR <- calculateFDR(d, d.null, progress=FALSE)
       k <- NULL
       R <- NULL
       Z <- NULL
