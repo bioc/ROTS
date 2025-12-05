@@ -64,14 +64,14 @@
      samples.all <- do.call("cbind",samples)
      
      if(!paired) {
-       f <- sum(sapply(samples, ncol)) / prod(sapply(samples, ncol))
+       f <- 1/(length(samples)-1)
        r <- vector(mode="numeric", length=nrow(samples.all))
        for(k in 1:length(samples)) {
-         r <- r + (rowMeans(samples[[k]], na.rm=TRUE)-rowMeans(samples.all, na.rm=TRUE))^2
+         r <- r + apply(samples[[k]], 1, function(x) sum(!is.na(x))) * (rowMeans(samples[[k]], na.rm=TRUE)-rowMeans(samples.all, na.rm=TRUE))^2
        }
        d <- (f*r)^0.5
        
-       f <- 1/sum(sapply(samples, ncol)-1) * sum(1/sapply(samples, ncol))
+       f <- 1/(apply(samples.all, 1, function(x) sum(!is.na(x))) - length(samples))
        s <- vector(mode="numeric", length=nrow(samples.all))
        for(k in 1:length(samples)) {
          s <- s + colSums(apply(samples[[k]], 1, function(x) (x-mean(x,na.rm=TRUE))^2), na.rm=TRUE)
