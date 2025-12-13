@@ -7,7 +7,7 @@
 }
 
 \usage{
-  \method{plot}{ROTS}(x, fdr=0.05, type=NULL, labels=FALSE, ...)
+  \method{plot}{ROTS}(x, type="reproducibility", fdr=0.05, labels=FALSE, ...)
 }
 
 \arguments{

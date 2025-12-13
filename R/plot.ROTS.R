@@ -1,4 +1,4 @@
-plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
+plot.ROTS <- function(x, type="reproducibility", fdr=0.05, labels=FALSE, ...) {
   
   # Check for plot type
   if (!is.null(type)) {
@@ -60,7 +60,7 @@ plot.ROTS <- function(x, fdr=0.05, type=NULL, labels=FALSE, ...) {
     plot(k, z, pch=20, xlab="Top list size", ylab="Reproducibility Z-score", cex=0.5, panel.first=lines(k, z, col="grey"), bty="l")
     points(k[which(z==max(z))], z[which(z==max(z))], pch=21, col="red")
     text(k[which(z==max(z))], z[which(z==max(z))], labels=round(max(z),digits=3), pos=4)
-    legend("topright",c(paste("a1 =",x$a1),paste("a2 =",x$a2)), bty="n")
+    legend("topright",c(paste("a1 =",x$a1),paste("a2 =",x$a2),paste("R =",round(x$R,2)),paste("k =",x$k)), bty="n")
   }
   
   # Histogram of p-values
