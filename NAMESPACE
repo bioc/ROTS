@@ -2,6 +2,7 @@
 export(ROTS)
 export(lmROTS)
 export(lmeROTS)
+export(coxphROTS)
 S3method(print, ROTS)
 S3method(summary, ROTS)
 S3method(plot, ROTS)
