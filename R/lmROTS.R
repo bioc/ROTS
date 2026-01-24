@@ -1,11 +1,11 @@
 # Function to run the lm model
 `runlm` <- function(i, formula, data, metadata) {
   tryCatch({
-    fit <- suppressMessages(suppressWarnings(lm(as.formula(paste("datavalue ~",formula)), data=cbind(metadata,datavalue=c(t(data[i,]))))))
+    fit <- suppressMessages(suppressWarnings(lm(formula, data=cbind(metadata,exprs=c(t(data[i,]))))))
     coef <- coefficients(summary(fit))
     co <- coef[-1,1]; names(co) <- paste("coef",rownames(coef)[-1],sep=".")
-    sd <- coef[-1,2]; names(sd) <- paste("sd",rownames(coef)[-1],sep=".")
-    return(c(co,sd))
+    se <- coef[-1,2]; names(se) <- paste("se",rownames(coef)[-1],sep=".")
+    return(c(co,se))
   }, error = function(e) {
     return(NA)
   })
@@ -15,7 +15,13 @@
 `lmROTS` <- function(formula, data, metadata, B=100, K=NULL, seed=NULL, a1=NULL, a2=NULL, BPPARAM=bpparam()) {
   if (is(data, "ExpressionSet"))
     data <- Biobase::exprs(data)
-  	
+  
+  # Check variables in formula
+  formula <- as.formula(formula)
+  if(!("exprs" %in% all.vars(formula))) {
+    stop("Term 'exprs' missing from the formula.")
+  }
+  
   # Set bootstraps and permutations
   if(!is.null(seed)) {
     set.seed(seed, kind="default")

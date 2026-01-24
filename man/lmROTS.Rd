@@ -15,9 +15,7 @@
 
 \arguments{
   \item{formula}{A string representing a formula that follows the \code{lm}
-    syntax and where the dependent variable (e.g. expression ~ ...) is omitted.
-    \code{lmROTS} uses each row of \code{data} as the dependent variable
-    and looks for explanatory variables from \code{metadata}.}
+    syntax.}
 	\item{data}{A numeric data matrix in which rows correspond
 		to genes and columns correspond to samples.}
 	\item{metadata}{A numeric data matrix in which rows correspond
@@ -40,8 +38,8 @@
 
 \value{
   \code{lmROTS} returns an object of class \code{regROTS}, which is a list
-  of ROTS results for each of the explanatory variables in the formula. They
-  contain the following components:
+  of ROTS results for each of the variables in the formula. They contain the
+  following components:
 	
 	\item{d}{the value of the optimized ROTS-statistic for each gene.}
   \item{coef}{coefficients of the model for each gene.}
@@ -61,8 +59,8 @@
 }
 
 \examples{
-## lmROTS-statistic
-\dontrun{rots.out <- lmeROTS("Group + Age", data, metadata)}
+## ROTS-statistic
+\dontrun{rots.out <- lmeROTS(exprs ~ Group + Age, data, metadata)}
 }
 
 \keyword{math}
