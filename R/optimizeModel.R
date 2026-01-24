@@ -2,7 +2,7 @@
 `optimizeModel` <- function(data, model.original, model.boot, model.null, B, K, seed, a1, a2, BPPARAM) {
   
   # Parameters to test
-  a.test <- c(-1, (0:20) / 100, (11:50) / 50, (6:25) / 5)
+  a.test <- c(-1, 0, (1:9)/1000, (1:20)/100, (11:50)/50, (6:25)/5)
   k.test <- c( (1:20) * 5, (11:50) * 10, (21:40) * 25, (11:1000) * 100)
   
   if (is.null(K)) {
