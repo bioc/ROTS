@@ -1,4 +1,4 @@
-plot.regROTS <- function(x, fdr=0.05, type=NULL, features=NULL, labels=FALSE, ...) {
+plot.regROTS <- function(x, fdr=0.05, type="reproducibility", features=NULL, labels=FALSE, ...) {
   
   # Check for plot type
   if (!is.null(type)) {
@@ -49,7 +49,7 @@ plot.regROTS <- function(x, fdr=0.05, type=NULL, features=NULL, labels=FALSE, ..
       mtext(names(x)[s])
       points(k[which(z==max(z, na.rm=TRUE))], z[which(z==max(z, na.rm=TRUE))], pch=21, col="red")
       text(k[which(z==max(z, na.rm=TRUE))], z[which(z==max(z, na.rm=TRUE))], labels=round(max(z, na.rm=TRUE),digits=3), pos=4)
-      legend("topright",c(paste("a1 =",x[[s]]$a1),paste("a2 =",x[[s]]$a2)), bty="n")
+      legend("topright",c(paste("a1 =",x[[s]]$a1),paste("a2 =",x[[s]]$a2),paste("R =",round(x[[s]]$R,2)),paste("k =",x[[s]]$k)), bty="n")
     }
   }
   

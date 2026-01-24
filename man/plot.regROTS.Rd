@@ -7,7 +7,7 @@
 }
 
 \usage{
-  \method{plot}{regROTS}(x, fdr=0.05, type=NULL, features=NULL, labels=FALSE, ...)
+  \method{plot}{regROTS}(x, fdr=0.05, type="reproducibility", features=NULL, labels=FALSE, ...)
 }
 
 \arguments{
@@ -33,8 +33,8 @@
 }
 
 \examples{
-  ## Run and plot lmeROTS-statistic 
-  \dontrun{rots.out <- lmeROTS("Group + Age + (1|Individual)", data, metadata)}
+  ## Run analysis and plot ROTS object 
+  \dontrun{rots.out <- lmROTS(exprs ~ Group + Age, data, metadata)}
   \dontrun{plot(rots.out, type="reproducibility")}
 }
 \keyword{math}
