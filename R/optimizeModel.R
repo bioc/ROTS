@@ -1,5 +1,5 @@
 # Function to run the optimization
-`optimizeModel` <- function(data, model.original, model.boot, model.null, B, K, seed, a1, a2, BPPARAM) {
+`optimizeModel` <- function(data, model.original, model.boot, model.null, B, K, seed, a1, a2, terms, BPPARAM) {
   
   # Parameters to test
   a.test <- c(-1, 0, (1:9)/1000, (1:20)/100, (11:50)/50, (6:25)/5)
@@ -18,7 +18,14 @@
   n <- (ncol(model.original)/2)
   names <- gsub("coef\\.","",colnames(model.original)[1:n])
   
-  results <- lapply(1:n, function(v) {
+  sel.terms <- 1:n
+  if (!is.null(terms)) {
+    if(any(names %in% terms)) {
+      sel.terms <- which(names %in% terms)
+    }
+  }
+  
+  results <- lapply((1:n)[sel.terms], function(v) {
     message(paste("Optimizing parameters:",names[v]))
     
     if(is.null(a1) & is.null(a2)) {
@@ -99,6 +106,6 @@
     }
     
   })
-  names(results) <- names
+  names(results) <- names[sel.terms]
   return(results)
 }
