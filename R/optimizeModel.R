@@ -47,13 +47,19 @@
       ztable[is.na(ztable)] <- NA
       
       # Select best parameters
-      a1 <- a.test[which(ztable == max(ztable[is.finite(ztable)]), arr.ind=TRUE)[1]]
+      sel <- which(ztable == max(ztable[is.finite(ztable)]), arr.ind=TRUE)
+      if (length(sel)>2) {
+        sel <- sel[1,]
+      }
+      
+      a1 <- a.test[sel[1]]
       a2 <- 1
       if(a1==-1) {
         a1 <- 1
         a2 <- 0
       }
-      k <- k.test[which(ztable == max(ztable[is.finite(ztable)]), arr.ind=TRUE)[2]]
+      
+      k <- k.test[sel[2]]
       
       # Produce final results
       coef <- model.original[,v]

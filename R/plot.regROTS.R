@@ -43,6 +43,9 @@ plot.regROTS <- function(x, fdr=0.05, type="reproducibility", features=NULL, lab
   if(type=="reproducibility") {
     for(s in sel.plot) {
       sel <- which(x[[s]]$ztable == max(x[[s]]$ztable[is.finite(x[[s]]$ztable)]), arr.ind=TRUE)
+      if (length(sel)>2) {
+        sel <- sel[1,]
+      }
       k <- as.numeric(colnames(x[[s]]$ztable))
       z <- x[[s]]$ztable[sel[1],]
       plot(k, z, pch=20, xlab="Top list size", ylab="Reproducibility Z-score", cex=0.5, panel.first=lines(k, z, col="grey"), bty="l")
