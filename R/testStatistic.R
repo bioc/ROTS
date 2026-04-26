@@ -94,22 +94,16 @@
   t <- unique(time[event==1])
   
   r <- vector(mode="numeric", length=nrow(samples.all))
-  for(k in t) {
-    i <- which(time>=k)
-    z <- which(time==k)
-    d <- z[which(event[which(time==k)]==1)]
-    if (length(i)>1) {
-      r <- r + (rowSums(as.data.frame(samples.all[,d]), na.rm=TRUE)-length(d)*rowMeans(samples.all[,i], na.rm=TRUE))
-    }
-  }
-  
   s <- vector(mode="numeric", length=nrow(samples.all))
   for(k in t) {
     i <- which(time>=k)
     z <- which(time==k)
-    d <- z[which(event[which(time==k)]==1)]
+    d <- which(time==k & event==1)
     if (length(i)>1) {
-      s <- s + ((length(d)/length(i)) * rowSums((samples.all[,i]-rowMeans(samples.all[,i], na.rm=TRUE))^2, na.rm=TRUE))
+      ni <- apply(samples.all[,i,drop=FALSE], 1, function(x) sum(!is.na(x)))
+      nd <- apply(samples.all[,d,drop=FALSE], 1, function(x) sum(!is.na(x)))
+      r <- r + (rowSums(as.data.frame(samples.all[,d,drop=FALSE]), na.rm=TRUE)-nd*rowMeans(samples.all[,i,drop=FALSE], na.rm=TRUE))
+      s <- s + ((nd/ni) * rowSums((samples.all[,i,drop=FALSE]-rowMeans(samples.all[,i,drop=FALSE], na.rm=TRUE))^2, na.rm=TRUE))
     }
   }
   s <- s^0.5
