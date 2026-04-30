@@ -53,6 +53,7 @@
     data <- data[,order(groups)]
     if (!is.null(time)) {
       event <- event[order(groups)]
+      time <- time[order(groups)]
     }
     groups <- sort(groups)
     
@@ -92,7 +93,11 @@
  
     ## Bootstrap samples
     if (verbose) message("Bootstrapping samples")
-    samples <- bootstrapSamples(data, 2*B, cl, paired)
+    if (!is.null(time)) {
+      samples <- bootstrapSamples.surv(data, 2*B)
+    } else {
+      samples <- bootstrapSamples(data, 2*B, cl, paired)
+    }
     ## Permutated samples
     pSamples <- permutatedSamples(data, nrow(samples), cl)
     
@@ -113,7 +118,7 @@
       ## dataset
       if( is.null(a1) | is.null(a2) ){
         if (!is.null(time)) {
-          fit <- testStatistic.surv(lapply(samples.R, function(x) data[,x]), cl, event)
+          fit <- testStatistic.surv(data[,samples[i,]], time[samples[i,]], event[samples[i,]])
         } else {
           fit <- testStatistic(paired, lapply(samples.R, function(x) data[,x]))
         }
@@ -122,7 +127,7 @@
       }
       
       if (!is.null(time)) {
-        pFit <- testStatistic.surv(lapply(pSamples.R, function(x) data[,x]), cl, event)
+        pFit <- testStatistic.surv(data[,pSamples[i,]], time, event)
       } else {
         pFit <- testStatistic(paired, lapply(pSamples.R, function(x) data[,x]))
       }
@@ -262,7 +267,7 @@
       ## Calculate the reproducibility-optimized test statistic based on the
       ## reproducibility-maximizing a1, a2 and k values and the corresponding FDR
       if (!is.null(time)) {
-        fit <- testStatistic.surv(lapply(split(1:length(cl), cl), function(x) data[,x]), cl, event)
+        fit <- testStatistic.surv(data, time, event)
       } else {
         fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
       }
@@ -303,7 +308,7 @@
       ## Calculate statistic based on the given parameter values
       ## and the corresponding FDR
       if (!is.null(time)) {
-        fit <- testStatistic.surv(lapply(split(1:length(cl), cl), function(x) data[,x]), cl, event)
+        fit <- testStatistic.surv(data, time, event)
       } else {
         fit <- testStatistic(paired, lapply(split(1:length(cl), cl), function(x) data[,x]))
       }

@@ -89,8 +89,8 @@
    
 }
 
-`testStatistic.surv` <- function(samples, time, event){
-  samples.all <- do.call("cbind",samples)
+`testStatistic.surv` <- function(samples.all, time, event){
+  #samples.all <- do.call("cbind",samples)
   t <- unique(time[event==1])
   
   r <- vector(mode="numeric", length=nrow(samples.all))
